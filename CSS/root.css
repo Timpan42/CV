@@ -45,3 +45,12 @@
     padding-top: var(--space-l-2xl);
     padding-bottom: var(--space-l-2xl);
 }
+
+.hero_header {
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: min(30rem, 100vw - var(--space-xl));
+    object-fit: cover;
+}
