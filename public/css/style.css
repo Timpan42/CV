@@ -1,0 +1,81 @@
+/*#Base classes*/
+.container {
+    width: min(75rem, 100vw - var(--space-xl));
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+
+.flow>*+* {
+    margin-top: var(--flow-space, 1em);
+}
+
+.wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--wrapper-max-width, 85rem);
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+    position: relative
+}
+
+.section {
+    padding-top: var(--space-l);
+    padding-bottom: var(--space-l);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-placement, auto-fill), minmax(var(--grid-min-item-size, 16rem), 1fr))
+}
+
+.grid[data-rows=masonry] {
+    align-items: start;
+    grid-template-rows: masonry
+}
+
+.grid[data-layout="50-50"] {
+    --grid-placement: auto-fit;
+    --grid-min-item-size: clamp(16rem, 50vw, 26rem);
+}
+
+
+.features {
+    --grid-placement: auto-fit;
+    --grid-min-item-size: clamp(16rem, 33%, 20rem);
+    --gutter: var(--space-l-xl);
+    --flow-space: var(--space-s);
+    padding: 0;
+}
+
+.list-container {
+    background-color: var(--color-bg-light);
+    border-radius: var(--border-radius);
+    max-width: unset;
+    padding: var(--space-m-l);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/*#Top classes*/
+.hero {
+    background:
+    linear-gradient(rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0.6)),
+    url('../img/cyber_temp.jpg');
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.hero h1,h2{
+    color: var(--color-bg);
+}
+
+
+/*#Mid classes*/
+
+
+/*#Projects classes*/
