@@ -57,18 +57,18 @@
 }
 
 /*#Top classes*/
-.hero{
+.hero {
     background:
-    linear-gradient(rgba(0, 0, 0, 0.4),
-    rgba(0, 0, 0, 0.8)),
-    url('../img/cyber_temp.jpg');
+        linear-gradient(rgba(0, 0, 0, 0.4),
+            rgba(0, 0, 0, 0.8)),
+        url('../img/cyber_temp.jpg');
     position: relative;
     background-size: cover;
     background-repeat: no-repeat;
-    
+
 }
 
-.hero-wrapper{
+.hero-wrapper {
     max-width: var(--wrapper-max-width, 90rem);
     padding-left: var(--gutter);
     padding-right: var(--gutter);
@@ -103,17 +103,16 @@
 /*#Projects classes*/
 .list-container {
     list-style-type: none;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-small);
+    overflow: hidden;
     max-width: unset;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
 }
 
 .list-container-div {
     display: inline-block;
     width: 100%;
     object-fit: cover;
-    background-color: rgba(30, 30, 30);
+    background-color: var(--color-fg);
 }
 
 .list-container-div img {
@@ -129,7 +128,7 @@
     padding: 9px;
     margin-bottom: -52px;
     background-color: rgba(30, 30, 30, .8);
-    top: -40px;
+    top: -42px;
     font-size: .8rem;
 }
 
@@ -138,15 +137,28 @@
     margin-bottom: 0;
 }
 
-.extra-info-div{
+.extra-info-div {
     display: flex;
     align-items: center;
 }
 
-.extra-info-div p{
+.extra-info-div p {
     margin-left: 6px;
     color: white;
     font-size: var(--step--1);
 }
 
-.list-container-div-text {}
+.list-container-div-content {
+    padding-left: 20px;
+    padding-right: 20px;
+    
+}
+
+.list-container-div-content h3 {
+    color: var(--color-light-text);
+}
+
+.list-container-div-content p {
+    color: var(--color-light-text);
+    font-size: var(--step-0);
+}
