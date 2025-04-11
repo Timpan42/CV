@@ -68,7 +68,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: var(--base-font);
-    color: var(--color-dark-text);
+    color: var(--color-light-text);
     background-color: var(--color-bg-light);
 }
 
