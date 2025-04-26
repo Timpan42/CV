@@ -1,4 +1,8 @@
 /*#Base classes*/
+.test{
+
+}
+
 .center {
     text-align: center;
 }
@@ -256,7 +260,7 @@ p {
     padding: 9px;
     margin-bottom: -52px;
     background-color: rgba(30, 30, 30, .8);
-    top: -49px;
+    top: -45px;
     font-size: .8rem;
 }
 
