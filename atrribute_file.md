@@ -1,3 +1,5 @@
+export GPG_TTY=$(tty)
+
 <a href="https://www.flaticon.com/free-icons/cv" title="CV icons">CV icons created by spaceman.design - Flaticon</a>
 This is the person on paper 
 

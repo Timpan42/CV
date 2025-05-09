@@ -1,5 +1,12 @@
 {
+  "name": "CV",
+  "homepage": "https://timpan42.github.io/CV/",
+  "version": "0.0.0",
+  "module": "module",
   "devDependencies": {
     "vite": "^6.2.5"
+  },
+  "dependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
