@@ -12,14 +12,7 @@ This is the CV on paper
 Arrow
 
 Todo:
-- Nav Link
-- Hamburger menu
-- Text on home page 
-- Colors  
 - Start on project page 
-- Images for projects
-- Show som code  
-- Fix text for projects  
 - Fixing Links 
     * Project
 - CV
