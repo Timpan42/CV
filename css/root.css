@@ -47,8 +47,9 @@
 
     --base-font: 'Roboto', sans-serif;
 
-    --color-fg: #535353;
+    --color-fg: rgb(37 42 49);
     --color-fg-opacity: rgba(0, 0, 0, 0.7);
+    --color-fg-second: rgb(37 48 49);
     --color-bg: #f5f5f7;
 
     --color-cards: #252525;

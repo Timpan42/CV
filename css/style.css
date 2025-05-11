@@ -265,7 +265,7 @@ nav-center-content.active {
 }
 
 .hero-content img {
-    height: min(35rem, 100vw - var(--space-xl));
+    height: min(40rem, 100vw - var(--space-xl));
     object-fit: cover;
 }
 
@@ -294,7 +294,7 @@ nav-center-content.active {
 
 .mid-container>* {
     flex-grow: 1;
-    flex-basis: 150px;
+    flex-basis: 250px;
 }
 
 .mid-container-one {}
@@ -399,7 +399,7 @@ p {
     align-items: center;
     justify-content: space-between;
     margin-top: 0px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .list-container-div-content-header h3,
@@ -422,7 +422,7 @@ a {
 
 /*#Education classes*/
 .education-background {
-    background-color: rgb(23, 49, 40);
+    background-color: var(--color-fg-second);
 }
 
 .list-container-div[data="edu"] {
