@@ -1,6 +1,4 @@
 /*#Base classes*/
-.test {}
-
 .center {
     text-align: center;
 }
@@ -85,7 +83,9 @@
     align-items: center;
 }
 
-.nav-left-content {}
+.nav-left-content {
+    z-index: 100;
+}
 
 .nav-left-content a {
     text-decoration: none;
@@ -105,6 +105,21 @@ a {
     font-size: var(--step-0);
 }
 
+.nav-center-content {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    gap: 20px;
+    padding: 0;
+}
+
+nav-center-content.active {
+    right: 0;
+}
+
+.nav-center-content a {
+    color: var(--color-light-text);
+}
 
 .nav-right-content {
     display: flex;
@@ -115,6 +130,101 @@ a {
     width: 100%;
     height: min(3rem, 100vw - var(--space-xl));
     object-fit: cover;
+}
+
+.hamburger {
+    display: none;
+    padding: 0;
+    position: relative;
+    width: 35px;
+    cursor: pointer;
+
+    appearance: none;
+    background: none;
+    outline: none;
+    border: none;
+    z-index: 100;
+
+}
+
+.hamburger .bar,
+.hamburger:after,
+.hamburger:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 5px;
+    background-color: var(--color-light-text);
+    margin: 6px 0px;
+    transition: 0.4s;
+}
+
+.hamburger.is-active:before {
+    transform: rotate(-45deg) translate(-8px, 6px);
+}
+
+.hamburger.is-active::after {
+    transform: rotate(45deg) translate(-9px, -8px);
+}
+
+.hamburger.is-active .bar {
+    opacity: 0;
+}
+
+.mobile-nav {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 35%;
+    width: 65%;
+    min-height: 100vh;
+    z-index: 98;
+    background-color: var(--color-fg-opacity);
+    padding-top: 120px;
+    align-items: center;
+}
+
+.mobile-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mobile-links a {
+    margin: 1rem;
+    padding: 15px 40px;
+    background-color: #271a29;
+    border-radius: var(--border-radius-small);
+}
+
+.mobile-img {
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 170px;
+
+}
+
+.mobile-img img {
+    height: min(3rem, 100vw - var(--space-s));
+}
+
+
+@media screen and (max-width: 900px) {
+    .nav-center-content {
+        display: none;
+    }
+
+    .nav-right-content {
+        display: none;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .mobile-nav.is-active {
+        display: block;
+    }
 }
 
 /*#Top classes*/
@@ -311,15 +421,15 @@ a {
 }
 
 /*#Education classes*/
-.education-background{
+.education-background {
     background-color: rgb(23, 49, 40);
 }
 
-.list-container-div[data="edu"]{
+.list-container-div[data="edu"] {
     background-color: inherit;
 }
 
-.list-container-div-content[data="edu"] p{
+.list-container-div-content[data="edu"] p {
     font-size: var(--step-1);
 }
 
@@ -348,13 +458,12 @@ a {
     flex-basis: 350px;
 }
 
-.footer-smaller-text {
-}
+.footer-smaller-text {}
 
-.footer-smaller-text p{
+.footer-smaller-text p {
     font-size: var(--step-0);
 }
 
-.footer-smaller-text a{
+.footer-smaller-text a {
     font-size: var(--step-0);
 }
