@@ -12,15 +12,16 @@ This is the CV on paper
 Arrow
 
 Todo:
-- Switching images 
+- Nav Link
+- Hamburger menu
 - Text on home page 
-- Fixing Links 
-    * Project
-    * CV download 
-    * Gymnasia arbete
 - Colors  
 - Start on project page 
 - Images for projects
 - Show som code  
 - Fix text for projects  
+- Fixing Links 
+    * Project
 - CV
+- Fixing Links 
+    * CV download 
