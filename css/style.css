@@ -1,7 +1,5 @@
 /*#Base classes*/
-.test{
-
-}
+.test {}
 
 .center {
     text-align: center;
@@ -39,11 +37,11 @@
     padding-bottom: var(--space-3xl);
 }
 
-.bottom-section{
+.bottom-section {
     padding-bottom: var(--space-l);
 }
 
-.big-bottom-section{
+.big-bottom-section {
     padding-bottom: var(--space-3xl);
 }
 
@@ -153,11 +151,11 @@ a {
 
 .hero-content>* {
     flex-grow: 1;
-    flex-basis: 150px;
+    flex-basis: 250px;
 }
 
 .hero-content img {
-    height: min(40rem, 100vw - var(--space-xl));
+    height: min(35rem, 100vw - var(--space-xl));
     object-fit: cover;
 }
 
@@ -307,16 +305,29 @@ p {
 
 }
 
-.list-container-div-content p, a{
+.list-container-div-content p,
+a {
     font-size: var(--step-0);
 }
 
-/*#Projects classes*/
+/*#Education classes*/
+.education-background{
+    background-color: rgb(23, 49, 40);
+}
+
+.list-container-div[data="edu"]{
+    background-color: inherit;
+}
+
+.list-container-div-content[data="edu"] p{
+    font-size: var(--step-1);
+}
+
 .list-container-div-content-header[data="edu"] {
     margin-bottom: 20px;
 }
 
-.edu-info{
+.edu-info {
     margin-bottom: 20px;
 }
 
@@ -324,4 +335,26 @@ p {
 
 .footer-background {
     background-color: black;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xl-3xl);
+}
+
+.footer-container>* {
+    flex-grow: 1;
+    flex-basis: 350px;
+}
+
+.footer-smaller-text {
+}
+
+.footer-smaller-text p{
+    font-size: var(--step-0);
+}
+
+.footer-smaller-text a{
+    font-size: var(--step-0);
 }
