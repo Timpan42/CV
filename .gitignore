@@ -12,6 +12,21 @@ dist
 dist-ssr
 *.local
 
+# Misc
+*.log
+npm-debug.*
+*.scssc
+*.swp
+.DS_Store
+.sass-cache
+.env
+.cache
+
+# Node modules and output
+node_modules
+dist
+src/_includes/css
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

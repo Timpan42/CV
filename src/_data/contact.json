@@ -1,0 +1,29 @@
+{
+	"items": [
+		{
+			"name": "Email",
+			"url": "tim@fagerdal.se",
+			"logo": ""
+		},
+		{
+			"name": "Linkedin",
+			"url": "https://www.linkedin.com/in/tim-fagerdal/",
+			"logo": "images/in-logo/InBug-White.png"
+		},
+		{
+			"name": "GitHub",
+			"url": "https://github.com/Timpan42",
+			"logo": "images/github/github-mark-white.png"
+		},
+		{
+			"name": "itch.io",
+			"url": "https://ostbagaren.itch.io/",
+			"logo": "images/itchio/itchio-logo-textless-white.png"
+		},
+		{
+			"name": "CV",
+			"url": "",
+			"logo": "images/curriculum-vitae-white.png"
+		}
+	]
+}

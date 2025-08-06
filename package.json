@@ -1,20 +1,28 @@
 {
   "name": "CV",
-  "homepage": "https://timpan42.github.io/CV/",
-  "version": "0.0.0",
-  "module": "module",
+  "version": "1.0.0",
+  "description": "--- title: Heading ---",
+  "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
-
+    "build": "npx @11ty/eleventy",
+    "start": "npx @11ty/eleventy --serve --quiet",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "vite": "^6.3.5"
+  "repository": {
+    "type": "git",
+    "url": "git+https://timpan42.github.io/CV.git"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://timpan42.github.io/issues"
+  },
+  "homepage": "https://timpan42.github.io/CV/",
   "dependencies": {
-    "gh-pages": "^6.3.0"
-  }
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2"
+  },
+  "devDependencies": {}
 }
