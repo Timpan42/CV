@@ -11,7 +11,7 @@ cardItem:
     summaryTwo: Worked on pick-ups, save system, buffs system, and store system.
     url: 
     urlText:   
-    imageUrl: images/project_img/Raccon_Rascal.png
+    imageUrl: ./images/project_img/Raccon_Rascal.png
     startDate: "2024/10"
     endDate: "2024/11"
     peopleAmount: 15

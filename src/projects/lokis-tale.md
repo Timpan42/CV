@@ -10,7 +10,7 @@ cardItem:
     summaryTwo: Worked on the game's UI design and implementation, Upgrade system, and combat mechanics.
     url: 
     urlText:   
-    imageUrl: images/project_img/Lokis_Tale.png
+    imageUrl: ./images/project_img/Lokis_Tale.png
     startDate: "2023/12"
     endDate: "2024/1"
     peopleAmount: 3

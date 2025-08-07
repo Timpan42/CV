@@ -11,7 +11,7 @@ cardItem:
     summaryTwo: Made the turn-based system, interaction system, and did the mobile port.
     url: 
     urlText:   
-    imageUrl: images/project_img/Tooth_and_Tail_Gimp.png
+    imageUrl: ./images/project_img/Tooth_and_Tail_Gimp.png
     startDate: "2025/2"
     endDate: "2025/3"
     peopleAmount: 15
