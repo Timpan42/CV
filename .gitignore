@@ -7,6 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+gh-pages
+gh-pages.pub
+
 node_modules
 dist
 dist-ssr
@@ -37,5 +40,3 @@ src/_includes/css
 *.njsproj
 *.sln
 *.sw?
-
-gh-pages

@@ -1,0 +1,20 @@
+{
+	"items": [
+		{
+			"text": "Projects",
+			"url": "#project"
+		},
+		{
+			"text": "Education",
+			"url": "#education"
+		},
+		{
+			"text": "About Me",
+			"url": "#aboutme"
+		},
+		{
+			"text": "Contact Me",
+			"url": "#contact"
+		}
+	]
+}
