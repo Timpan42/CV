@@ -1,7 +1,7 @@
-name: Build PR
+name: Build Eleventy
 
 on:
-  pull_request:
+  push:
     branches: ['main']
 
 jobs:
@@ -21,8 +21,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Install packages
-        run: npm ci
+      - name: Install dependencies & build
+        run: |
+            npm ci
+            npm run build
 
-      - name: Run npm build
-        run: npm run build
+      - name: Deploy
+        uses: peaciris/actions-gh-pages@4
+        with:
+            publish_dir: ./dist
+            github_token: ${{ secrets.GITHUB_TOKEN }} 
