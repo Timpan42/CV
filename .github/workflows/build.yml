@@ -24,10 +24,10 @@ jobs:
       - name: Install dependencies & build
         run: |
             npm ci
-            npm run build:prod
+            npm run build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
-            publish_dir: ./dist
+            publish_dir: dist
             github_token: ${{ secrets.GITHUB_TOKEN }} 
