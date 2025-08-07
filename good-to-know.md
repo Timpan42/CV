@@ -1,4 +1,4 @@
-	
+{# 	
 Get info from the md file (index) then adds it when building
     </div>
 		<p class="">{{ intro.summary }}</p>
@@ -53,4 +53,4 @@ Todo:
     * Project
 - CV
 - Fixing Links 
-    * CV download 
+    * CV download  #}
