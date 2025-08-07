@@ -2,7 +2,7 @@
 
 {% block css %}
 {# THIS IS FROM HOME.HTML #}
-
+<link rel="stylesheet" href="css/card-style.css">
 
 
 {# THIS IS FROM HOME.HTML #}
@@ -32,13 +32,13 @@
 		<div class="container" id="project">
 			<h2 class="center">Projects</h2>
 			<ul class="features grid" role="list" data-rows="masonry">
-				
+
 				{%- for card in collections.card | reverse -%}
 				<li class="list-container flow">
 					{% set cardItemContent = card.data.cardItem %}
 					{% include "partials/card.html" %}
 				</li>
-				
+
 				{%- endfor -%}
 
 			</ul>
