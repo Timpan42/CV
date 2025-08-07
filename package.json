@@ -4,7 +4,7 @@
   "description": "--- title: Heading ---",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV=production eleventy --pathprefix 'CV'",
+    "build": "NODE_ENV=production eleventy",
     "start": "npx @11ty/eleventy --serve --quiet",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
