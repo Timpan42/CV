@@ -1,0 +1,15 @@
+{% extends "layouts/base.html" %}
+
+{% block css %}
+{# THIS IS FROM PROJECT.HTML #}
+
+<link rel="stylesheet" href="/css/project.css">
+
+{# THIS IS FROM PROJECT.HTML #}
+{% endblock css %}
+
+{% block content %}
+
+{{ content | safe}}
+
+{% endblock %}

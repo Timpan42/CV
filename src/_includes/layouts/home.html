@@ -10,49 +10,43 @@
 
 {% block content %}
 
-<main>
-
-
-	{# START Hero #}
-	<article class="hero section">
-		<div class="hero-content hero-wrapper container flow big-section">
-			<div class="flow section">
-				<!-- TODO: sida vid sida -->
-				<h1>Tim Fagerdal </h1>
-				<h2>Gameplay Programmer</h2>
-				<p>I like to work mainly on gameplay, but I enjoy dabbling in a little bit of everything</p>
-			</div>
-			<img src="/images/trädd.png" alt="">
+{# START Hero #}
+<article class="hero section">
+	<div class="hero-content hero-wrapper container flow big-section">
+		<div class="flow section">
+			<h1>Tim Fagerdal </h1>
+			<h2>Gameplay Programmer</h2>
+			<p>I like to work mainly on gameplay, but I enjoy dabbling in a little bit of everything</p>
 		</div>
-	</article>
-	{# END Hero #}
+		<img src="/images/trädd.png" alt="">
+	</div>
+</article>
+{# END Hero #}
 
-	{# START Cards #}
-	<article class="big-section">
-		<div class="container" id="project">
-			<h2 class="center">Projects</h2>
-			<ul class="features grid" role="list" data-rows="masonry">
+{# START Cards #}
+<article class="big-section">
+	<div class="container" id="project">
+		<h2 class="center">Projects</h2>
+		<ul class="features grid" role="list" data-rows="masonry">
 
-				{%- for card in collections.card | reverse -%}
-				<li class="list-container flow">
-					{% set cardItemContent = card.data.cardItem %}
-					{% include "partials/card.html" %}
-				</li>
+			{%- for card in collections.card | reverse -%}
+			<li class="list-container flow">
+				{% set cardItemContent = card.data.cardItem %}
+				{% include "partials/card.html" %}
+			</li>
 
-				{%- endfor -%}
+			{%- endfor -%}
 
-			</ul>
-		</div>
-	</article>
-	{# END Cards #}
+		</ul>
+	</div>
+</article>
+{# END Cards #}
 
 
-	{# START Education #}
+{# START Education #}
 
-	{% include "partials/edu.html" %}
+{% include "partials/edu.html" %}
 
-	{# END Education#}
-
-</main>
+{# END Education#}
 
 {% endblock %}
