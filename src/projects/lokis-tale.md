@@ -8,9 +8,9 @@ cardItem:
     role: Gameplay/System/UI programmer   
     summaryOne: A Pong roguelike, with the theme of Nordic mythology. Made during my high school engineering schooling.
     summaryTwo: Worked on the game's UI design and implementation, Upgrade system, and combat mechanics.
-    url: 
+    url: projects/lokis-tale/
     urlText:   
-    imageUrl: ./images/project_img/Lokis_Tale.png
+    imageUrl: project_img/Lokis_Tale.png
     startDate: "2023/12"
     endDate: "2024/1"
     peopleAmount: 3

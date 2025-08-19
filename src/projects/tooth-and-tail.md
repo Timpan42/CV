@@ -9,9 +9,9 @@ cardItem:
     role: Gameplay/System programmer   
     summaryOne: Second game project at FutureGames, a turn-based stealth game, where your goal is to navigate the level and not get killed by the enemies.
     summaryTwo: Made the turn-based system, interaction system, and did the mobile port.
-    url: 
+    url: projects/by-tooth-and-tail/
     urlText:   
-    imageUrl: ./images/project_img/Tooth_and_Tail_Gimp.png
+    imageUrl: project_img/Tooth_and_Tail_Gimp.png
     startDate: "2025/2"
     endDate: "2025/3"
     peopleAmount: 15

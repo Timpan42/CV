@@ -7,8 +7,8 @@ cardItem:
     title: In Bloom
     role: AI/Combat/UI programming  
     summaryOne: Third game project at FutureGames, a first person horror survival game in a post-apocalyptic world where nature has taken over.
-    summaryTwo: 
-    url: 
+    summaryTwo: Worked on the enemy combat and AI, also did UI Programming     
+    url: projects/in-bloom/
     urlText:   
     imageUrl: 
     startDate: "2025/05"
