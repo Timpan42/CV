@@ -174,23 +174,93 @@
 
 <article class="section">
     <div class="container project-content big-section">
-        <div class="center">
-            <h1>In Bloom </h1>
-            <h3>Horror | FPS | Post-apocalyptic</h3>
+        <div>
+            <h1 class="center">In Bloom </h1>
+            <h3 class="center">Horror | FPS | Post-apocalyptic</h3>
             <p>A first person horror survival game in a post-apocalyptic world where nature has taken over</p>
+            <p>Itch.io page: <a href="https://futuregames.itch.io/in-bloom">https://futuregames.itch.io/in-bloom</a></p>
         </div>
         <img src="/CV/images/project_img/in-bloom.webp" alt="">
     </div>
-    <div class="container section">
-        <h3>Summary</h3>
-        <p>Text</p>
-        <p>Text</p>
-        <p>Text</p>
+
+    <div>
+
     </div>
 
-    <div class="container section">
-        <h3>I Worked On</h3>
-    </div>
+    <section class="container section">
+        <h2>Summary</h2>
+        <p>Text</p>
+        <p>Text</p>
+        <p>Text</p>
+    </section>
+
+    <section class="container section">
+        <h2>AI</h2>
+        <p>The enemy AI uses Unreal's <b>Behavior Tree</b> and <b>AI controller</b> in combination with <b>task
+                nodes</b> and a <b>Blackboard</b> to
+            create the enemies behavior. It also has a <b>AI Perception </b> component for seeing and hearing noises the
+            player makes. The AI has
+            stated It can be in:
+        </p>
+        <ul>
+            <li>
+                <p>
+                    Idle; Standing in one place looking around waiting for a new event to execute a different behavior.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Patrol; Moving around to different locations depending on what patrol pattern is attached.
+                </p>
+            </li>
+
+            <li>
+                <p>
+                    Alerted; Moves to the last known location of a sensation trigger.
+                    Chase; Chases the player if the player is in its seeing range, when it's close enough to the player
+                    it
+                    attacks.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Attack; The enemy attacks doing an attack animation and a collision check to see if it hits, if it
+                    does the
+                    player takes damage, if the player moves out of range during the attack nothing happens.
+                </p>
+            </li>
+        </ul>
+        <p>
+            The AI is editable per enemy so it can have different behaviors making it possible to have different scenarios and
+            challenges for the player. There are four patrol behaviors
+        </p>
+        <ul>
+            <li>
+                <p>
+                    No Patrolling; The Ai doesn't move from its spawn position.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Patrol points in order; Follows a fixed route based on patrol points.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Patrol points random; Randomly chooses a patrol point it can go to.
+                </p>
+            </li>
+            <li>
+                <p>
+                    True random: Randomly chooses a point in the navigation mesh it in and goes to it.
+                </p>
+            </li>
+        </ul>
+        <p>A normal sequence for the Ai would be, moving around based on its patrol behavior, if it gets a sensation trigger
+            change to Alerted state. If it spots the player change to Chase state. When it loses sight of the player, change
+            Alerted state and if it can not see the player there change to Patrol state. 
+        </p>
+           </section>
 </article>
 
 

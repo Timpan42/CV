@@ -176,13 +176,3 @@
     flex-grow: 1;
     flex-basis: 350px;
 }
-
-.footer-smaller-text {}
-
-.footer-smaller-text p {
-    font-size: var(--step-0);
-}
-
-.footer-smaller-text a {
-    font-size: var(--step-0);
-}

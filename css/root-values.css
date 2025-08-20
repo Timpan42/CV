@@ -80,15 +80,15 @@ body {
 }
 
 h1 {
-    font-size: var(--step-5);
+    font-size: var(--step-4);
 }
 
 h2 {
-    font-size: var(--step-3);
+    font-size: var(--step-2);
 }
 
 h3 {
-    font-size: var(--step-2);
+    font-size: var(--step-1);
 }
 
 h1 h2 h3 {
@@ -96,12 +96,12 @@ h1 h2 h3 {
 }
 
 p {
-    font-size: var(--step-1);
+    font-size: var(--step-0);
     font-weight: 400;
 }
 
 a {
-    font-size: var(--step-1);
+    font-size: var(--step-0);
     font-weight: 400;
     color: var(--color-link);
     text-decoration: none;
