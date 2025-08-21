@@ -172,15 +172,15 @@
         
 
 
-<article class="section">
-    <div class="container project-content big-section">
+<article class="big-section">
+    <div class="container project-top-content section">
         <div>
             <h1 class="center">In Bloom </h1>
             <h3 class="center">Horror | FPS | Post-apocalyptic</h3>
             <p>A first person horror survival game in a post-apocalyptic world where nature has taken over</p>
             <p>Itch.io page: <a href="https://futuregames.itch.io/in-bloom">https://futuregames.itch.io/in-bloom</a></p>
         </div>
-        <img src="/CV/images/project_img/in-bloom.webp" alt="">
+        <img src="/CV/images/project_img/in-bloom/in-bloom.webp" alt="">
     </div>
 
     <div>
@@ -188,14 +188,41 @@
     </div>
 
     <section class="container section">
-        <h2>Summary</h2>
-        <p>Text</p>
-        <p>Text</p>
-        <p>Text</p>
-    </section>
-
-    <section class="container section">
-        <h2>AI</h2>
+        <div class="project-about">
+            <div class="project-about-content">
+                <h3>Summary</h3>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+                    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
+                    type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+                    remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+                    Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of
+                    Lorem Ipsum.                
+                </p>
+            </div>
+            
+            <div class="project-about-content">
+                <h3>Project Info</h3>
+                <p>
+                    <b>Team Size:</b> 18
+                </p>
+                <p>
+                    <b>Project Duration:</b> 7 weeks
+                </p>
+                <p>
+                    <b>Engine:</b> Unreal 5
+                </p>
+                <p>
+                    <b>Roles:</b> AI/Combat/UI programming
+                </p>
+                <p>
+                    <b>Other Tools:</b> Perforce, Miro, Jira
+                </p>
+            </div>
+        </div>
+        </section>
+        
+        <section class="container section">
+            <h2>AI</h2>
         <p>The enemy AI uses Unreal's <b>Behavior Tree</b> and <b>AI controller</b> in combination with <b>task
                 nodes</b> and a <b>Blackboard</b> to
             create the enemies behavior. It also has a <b>AI Perception </b> component for seeing and hearing noises the
@@ -212,6 +239,7 @@
                 <p>
                     Patrol; Moving around to different locations depending on what patrol pattern is attached.
                 </p>
+                <img class="center project-single-img" src="/CV/images/project_img/in-bloom/patrol-ai-tree.webp" alt="">
             </li>
 
             <li>
@@ -221,6 +249,14 @@
                     it
                     attacks.
                 </p>
+                <img class="project-single-img" src="/CV/images/project_img/in-bloom/alerted-ai-tree.webp" alt="">
+            </li>
+            <li>
+                <p>
+                    Chase; Chases the player if the player is in its seeing range, when it's close enough to the player it attacks.
+                </p>
+                <img class="project-single-img" src="/CV/images/project_img/in-bloom/chase-code.webp" alt="">
+            
             </li>
             <li>
                 <p>
@@ -228,10 +264,12 @@
                     does the
                     player takes damage, if the player moves out of range during the attack nothing happens.
                 </p>
+                <img class="project-single-img" src="/CV/images/project_img/in-bloom/attack-ai-tree.webp" alt="">
             </li>
         </ul>
         <p>
-            The AI is editable per enemy so it can have different behaviors making it possible to have different scenarios and
+            The AI is editable per enemy so it can have different behaviors making it possible to have different
+            scenarios and
             challenges for the player. There are four patrol behaviors
         </p>
         <ul>
@@ -256,11 +294,13 @@
                 </p>
             </li>
         </ul>
-        <p>A normal sequence for the Ai would be, moving around based on its patrol behavior, if it gets a sensation trigger
-            change to Alerted state. If it spots the player change to Chase state. When it loses sight of the player, change
-            Alerted state and if it can not see the player there change to Patrol state. 
+        <p>A normal sequence for the Ai would be, moving around based on its patrol behavior, if it gets a sensation
+            trigger
+            change to Alerted state. If it spots the player change to Chase state. When it loses sight of the player,
+            change
+            Alerted state and if it can not see the player there change to Patrol state.
         </p>
-           </section>
+    </section>
 </article>
 
 
