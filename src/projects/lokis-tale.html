@@ -6,23 +6,24 @@ date: "2023-12-01"
 
 cardItem:
     title: Loki's Tale
+    startDate: "2023/12"
+    endDate: "2024/1"
     role: Gameplay/System/UI programmer   
+    peopleAmount: 3
+    timeWorked: 5 weeks
+    engine: Godot
+    otherTools: Perforce, Miro, Jira
     summaryOne: A Pong roguelike, with the theme of Nordic mythology. Made during my high school engineering schooling.
     summaryTwo: Worked on the game's UI design and implementation, Upgrade system, and combat mechanics.
     url: projects/lokis-tale/
     projectUrl: https://ostbagaren.itch.io/lokis-tale
-    imageUrl: project_img/Lokis_Tale.png
-    imageProjectUrl: project_img/Lokis_Tale.png
-    startDate: "2023/12"
-    endDate: "2024/1"
-    peopleAmount: 3
-    timeWorked: 5 weeks
-    engine: Godot
-
+    imageFileRoute: project_img/lokis-tale
+    imageUrl: /Lokis_Tale.png
+    imageProjectUrl: /Lokis_Tale.png
 ---
 
-<article class="section">
-    <div class="container project-content big-section">
+<article class="big-section">
+    <div class="container project-top-content section">
         <div class="center">
             <h1>{{ title }} </h1>
             <h2> plaplaplaplapla</h2>
@@ -30,6 +31,6 @@ cardItem:
             <p>Itch.io page: <a href="{{cardItem.projectUrl}}">{{cardItem.projectUrl}}</a></p>
 
         </div>
-        <img src="/images/{{ cardItem.imageProjectUrl }}" alt="">
+        <img src="/images/{{ cardItem.imageFileRoute }}{{ cardItem.imageProjectUrl }}" alt="">
     </div>
 </article>
