@@ -52,8 +52,9 @@
     --color-fg-second: rgb(37 48 49);
     --color-bg: #f5f5f7;
 
-    --color-cards: #252525;
-
+    /* --color-cards: #252525; */
+    --color-cards: #141414;
+    
     --color-dark-text: #1d1d1f;
     --color-light-text: #f5f5f7;
 

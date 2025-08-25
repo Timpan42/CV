@@ -27,7 +27,7 @@ cardItem:
 ---
 
 <article class="big-section">
-    <div class="container project-top-content section">
+    <section class="container project-top-content section">
         <div>
             <h1 class="center">{{ title }} </h1>
             <h3 class="center">Horror | FPS | Post-apocalyptic</h3>
@@ -35,26 +35,29 @@ cardItem:
             <p>Itch.io page: <a href="{{cardItem.projectUrl}}">{{cardItem.projectUrl}}</a></p>
         </div>
         <img src="/images/{{ cardItem.imageFileRoute }}{{ cardItem.imageProjectUrl }}" alt="">
-    </div>
+    </section>
 
-    <div>
-
-    </div>
-
-    <section class="container section">
+    <section class="container flow">
         <div class="project-about">
-            <div class="project-about-content">
+            <div class="project-about-content project-text-padding">
                 <h3>Summary</h3>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
-                    type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-                    Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of
-                    Lorem Ipsum.                
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry's
+                    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                    scrambled it
+                    to make a
+                    type specimen book. It has survived not only five centuries, but also the leap into electronic
+                    typesetting,
+                    remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
+                    containing
+                    Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
+                    including
+                    versions of
+                    Lorem Ipsum.
                 </p>
             </div>
-            
-            <div class="project-about-content">
+
+            <div class="project-about-content project-text-padding">
                 <h3>Project Info</h3>
                 <p>
                     <b>Team Size:</b> {{cardItem.peopleAmount}}
@@ -73,86 +76,144 @@ cardItem:
                 </p>
             </div>
         </div>
-        </section>
-        
-        <section class="container section">
-            <h2>AI</h2>
-        <p>The enemy AI uses Unreal's <b>Behavior Tree</b> and <b>AI controller</b> in combination with <b>task
-                nodes</b> and a <b>Blackboard</b> to
-            create the enemies behavior. It also has a <b>AI Perception </b> component for seeing and hearing noises the
-            player makes. The AI has
-            stated It can be in:
-        </p>
-        <ul>
-            <li>
-                <p>
-                    Idle; Standing in one place looking around waiting for a new event to execute a different behavior.
-                </p>
-            </li>
-            <li>
-                <p>
-                    Patrol; Moving around to different locations depending on what patrol pattern is attached.
-                </p>
-                <img class="center project-single-img" src="/images/{{ cardItem.imageFileRoute }}/patrol-ai-tree.webp" alt="">
-            </li>
 
-            <li>
-                <p>
-                    Alerted; Moves to the last known location of a sensation trigger.
-                    Chase; Chases the player if the player is in its seeing range, when it's close enough to the player
-                    it
-                    attacks.
+        <div class="wrapper">
+            <div class="project-content-background project-text-padding">
+
+                <h2>Introduction</h2>
+                <p>My three main working aries were AI and combat programming - anything related to the enemy in the
+                    game
+                    was my
+                    responsibility to program, and UI programming - helping the UI team implement their UI and any
+                    feathers
+                    that they
+                    needed was my responsibility.
                 </p>
-                <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/alerted-ai-tree.webp" alt="">
-            </li>
-            <li>
-                <p>
-                    Chase; Chases the player if the player is in its seeing range, when it's close enough to the player it attacks.
+                <p>The AI uses Unreal's behavior tree and states for determining behavior, combining the AI controller
+                    and
+                    task nodes to
+                    execute behavior. We used unreal's third person character as a base for movement, saving time on not
+                    making our own
+                    character controller.
+
+                    For combat I made sure that the enemy worked with the main combat mechanic in the game and that the
+                    enemies were
+                    easily balanceable without modifying code.
+                    For UI I worked together with the UI team making the UI work, setting up connections between what is
+                    happening in the
+                    game with the UI. I worked on the main- and pause menu, making settings and navigation consistent
+                    and
+                    working.
                 </p>
-                <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/chase-code.webp" alt="">
-            
-            </li>
-            <li>
-                <p>
-                    Attack; The enemy attacks doing an attack animation and a collision check to see if it hits, if it
-                    does the
-                    player takes damage, if the player moves out of range during the attack nothing happens.
+                <p>I spent most of my time programming in blueprints mostly because it was fast to prototype feathers,
+                    and
+                    so others in
+                    the team had the possibility to edit and understand the code base, especially if they didn't have
+                    experience working
+                    in C++.
                 </p>
-                <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/attack-ai-tree.webp" alt="">
-            </li>
-        </ul>
-        <p>
-            The AI is editable per enemy so it can have different behaviors making it possible to have different
-            scenarios and
-            challenges for the player. There are four patrol behaviors
-        </p>
-        <ul>
-            <li>
+            </div>
+        </div>
+
+        <div class="wrapper">
+            <div class="project-content-background project-text-padding">
+                <h2>AI</h2>
+                <p>The enemy AI uses Unreal's <b>Behavior Tree</b> and <b>AI controller</b> in combination with <b>task
+                        nodes</b> and a <b>Blackboard</b> to
+                    create the enemies behavior. It also has a <b>AI Perception </b> component for seeing and hearing
+                    noises
+                    the
+                    player makes. The AI has
+                    stated It can be in:
+                </p>
+                <div class="project-side-by-side">
+                    <div>
+                        <p>
+                            Idle; Standing in one place looking around waiting for a new event to execute a different
+                            behavior.
+                        </p>
+                        <p>
+                            Patrol; Moving around to different locations depending on what patrol pattern is attached.
+                        </p>
+                    </div>
+                    <img class="center project-single-img"
+                        src="/images/{{ cardItem.imageFileRoute }}/patrol-ai-tree.webp" alt="">
+                </div>
+
+                <div class="project-side-by-side" data-layout="column-reverse">
+                    <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/alerted-ai-tree.webp"
+                        alt="">
+                    <p>
+                        Alerted; Moves to the last known location of a sensation trigger.
+                        Chase; Chases the player if the player is in its seeing range, when it's close enough to the
+                        player
+                        it
+                        attacks.
+                    </p>
+                </div>
+                <div class="project-side-by-side">
+                    <p>
+                        Chase; Chases the player if the player is in its seeing range, when it's close enough to the
+                        player it attacks.
+                    </p>
+                    <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/chase-code.webp" alt="">
+                </div>
+
+                <div class="project-side-by-side" data-layout="column-reverse">
+                    <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/attack-ai-tree.webp"
+                        alt="">
+                    <p>
+                        Attack; The enemy attacks doing an attack animation and a collision check to see if it hits,
+                        if
+                        it
+                        does the
+                        player takes damage, if the player moves out of range during the attack nothing happens.
+                    </p>
+                </div>
+
+                <p>
+                    The AI is editable per enemy so it can have different behaviors making it possible to have different
+                    scenarios and
+                    challenges for the player. There are four patrol behaviors:
+                </p>
                 <p>
                     No Patrolling; The Ai doesn't move from its spawn position.
                 </p>
-            </li>
-            <li>
                 <p>
                     Patrol points in order; Follows a fixed route based on patrol points.
                 </p>
-            </li>
-            <li>
                 <p>
                     Patrol points random; Randomly chooses a patrol point it can go to.
                 </p>
-            </li>
-            <li>
                 <p>
                     True random: Randomly chooses a point in the navigation mesh it in and goes to it.
                 </p>
-            </li>
-        </ul>
-        <p>A normal sequence for the Ai would be, moving around based on its patrol behavior, if it gets a sensation
-            trigger
-            change to Alerted state. If it spots the player change to Chase state. When it loses sight of the player,
-            change
-            Alerted state and if it can not see the player there change to Patrol state.
-        </p>
+                <p>A normal sequence for the Ai would be, moving around based on its patrol behavior, if it gets a
+                    sensation
+                    trigger
+                    change to Alerted state. If it spots the player change to Chase state. When it loses sight of the
+                    player,
+                    change
+                    Alerted state and if it can not see the player there change to Patrol state.
+                </p>
+            </div>
+        </div>
+
+         <div class="wrapper">
+            <div class="project-content-background project-text-padding">
+
+                <h2>What I learned </h2>
+                <p>My three main working aries were AI and combat programming - anything related to the enemy in the
+                    game
+                    was my
+                    responsibility to program, and UI programming - helping the UI team implement their UI and any
+                    feathers
+                    that they
+                    needed was my responsibility.
+                </p>
+            </div>
+        </div>
+
     </section>
+
 </article>
