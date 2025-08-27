@@ -10,7 +10,7 @@
         <ul class="nav-center-content">
             {% for item in navigation.items %}
             <li>
-                <a href="{{ item.url }}">{{ item.text }}</a>
+                <a href="/{{ item.url }}">{{ item.text }}</a>
             </li>
             {% endfor %}
         </ul>
@@ -39,7 +39,7 @@
 
             <div class="mobile-links section">
                 {% for item in navigation.items %}
-                <a href="{{ item.url }}">{{ item.text }}</a>
+                <a href="/{{ item.url }}">{{ item.text }}</a>
                 {% endfor %}
             </div>
 
