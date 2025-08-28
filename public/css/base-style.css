@@ -74,7 +74,7 @@
     background:
         linear-gradient(rgba(0, 0, 0, 0.4),
             rgba(0, 0, 0, 0.8)),
-        url('../images/cyber_temp.jpg');
+        url('../images/main/cyber_temp.jpg');
     position: relative;
     background-size: cover;
     background-repeat: no-repeat;

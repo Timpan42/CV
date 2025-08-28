@@ -9,4 +9,13 @@ window.onload = function(){
     })
 }
 
+function ToggleContent(itemId) {
+  var element = document.getElementById(itemId);
+  if (element.style.display === "none") {
+    element.style.display = "block";
+  } else {
+    element.style.display = "none";
+  }
+}
+
 
