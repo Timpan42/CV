@@ -16,6 +16,7 @@
     
 
 
+<link rel="stylesheet" href="/CV/css/prism.css">
 <link rel="stylesheet" href="/CV/css/project.css">
 
 
@@ -96,7 +97,7 @@
             
 
             <a href=".">
-                <img src="/CV/images/curriculum-vitae-white.png" alt="CV">
+                <img src="/CV/images/main/curriculum-vitae-white.png" alt="CV">
             </a>
 
             
@@ -155,7 +156,7 @@
                 
 
                 <a href=".">
-                    <img src="/CV/images/curriculum-vitae-white.png" alt="CV">
+                    <img src="/CV/images/main/curriculum-vitae-white.png" alt="CV">
                 </a>
 
                 
@@ -221,30 +222,267 @@
 
                 <h3>Introduction</h3>
                 <p>
-
+                    Loki's Tale is a pong roguelike based on nordic mythology. The goal of the game is to traverse stages to reach
+                    Valhalla, in each stage there's a key that needs to be gathered to open the boss room, where you need to fight the
+                    stage boss. When traversing the stage there's a chance on encountering a enemy where you would need to fight in a
+                    game of pong. After defeating an enemy you can choose an item that gives power ups and special effects.
+                </p>
+                <div class="project-side-by-side" data-layout="only-img">
+                    <img src="/CV/images/project_img/lokis-tale/stage_compresst.webp" alt="">
+                    <img src="/CV/images/project_img/lokis-tale/combat_compresst.webp" alt="">
+                </div>
+                <p>
+                    This was a school project done during my high school education where I worked on the Ui design and implementation,
+                    the items and upgrade system, and gameplay mechanics.
+                </p>
+                <p>
+                    I implemented the damage and special effects of items and how they would interact in a pong match. We used a JSON
+                    file for storing information about items and how they would upgrade when having multiple of them. I made the JSON
+                    parser and how the date would be matched when the player got an item.
+                </p>
+                <p>
+                    I made all UI elements and did the implementation for the game, also worked on the sound and music design and
+                    implementation.
+                </p>
+                <p>
+                    This project was written in GD script because the whole team had the opinion that it would be the easiest way to
+                    work with Godot, and an easy language to learn.
                 </p>
             </div>
         </div>
 
         <div class="wrapper">
             <div class="project-content-background project-text-padding">
-                <h3>Subject</h3>
+                <h3>Items & Upgrades</h3>
                 <p>
-
+                    As mentioned in the introduction we used a JSON file to store item data and how they upgrade when having multiple of
+                    them. I wrote a parser so it collected all necessary data so it could be used for the player while in combat and for
+                    the upgrade system to display details of each item after defeating an enemy.
                 </p>
                 <div class="project-side-by-side">
                     <div>
                         <p>
+                            The item system randomly chooses three items that gets generated and presented for the player. The player can choose
+                            one of these items that impacts the gameplay; if the player already has the item, the item in question gets upgraded
+                            with better stats or effects.
+                        </p>
+                        <p>
+                            When an item gets selected the description UI changes giving a description of the item and changing the image. When
+                            the player presses “Yes” after selecting an item, it is given to the player and is permanently active during the
+                            players run.
+                        </p>
+                        <p>
+                            Some challenges I had with this system was making the detailed text have special effects when being generated, being
+                            able in the JSON file to have tags in the text to highlight certain words. My solution for this was using Rich Text
+                            and using text find. When a tag was found I switched the tag to a corresponding effect tag, that rich text has, and
+                            the same for the closing tag, closing the effect.
                         </p>
                     </div>
-                    <img class="center project-single-img" src="/CV/images/project_img/lokis-tale/" alt="">
+                    <img class="center project-single-img" src="/CV/images/project_img/lokis-tale/upgrade_compresst.webp" alt="">
                 </div>
 
-                <div class="project-side-by-side" data-layout="column-reverse">
-                    <img class="project-single-img" src="/CV/images/project_img/lokis-tale/" alt="">
-                    <p>
-                    </p>
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('JSON_parser')">
+                        <h4>
+                        JSON parser
+                        </h4>
+                        <img src="/CV/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="JSON_parser">
+                        <pre class="language-gdscript"><code class="language-gdscript"><span class="token keyword">extends</span> <span class="token class-name">Node</span>
+
+<span class="token keyword">var</span> data_file_path <span class="token operator">=</span> <span class="token string">"res://Scenes/Item/item.json"</span>
+
+<span class="token keyword">func</span> <span class="token function">json_file_size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">if</span> FileAccess<span class="token punctuation">.</span><span class="token function">file_exists</span><span class="token punctuation">(</span>data_file_path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token keyword">var</span> data_file <span class="token operator">=</span> FileAccess<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span>data_file_path<span class="token punctuation">,</span> FileAccess<span class="token punctuation">.</span><span class="token constant">READ</span><span class="token punctuation">)</span>
+		<span class="token keyword">var</span> parse_result <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse_string</span><span class="token punctuation">(</span>data_file<span class="token punctuation">.</span><span class="token function">get_as_text</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> parse_result <span class="token keyword">is</span> Array<span class="token punctuation">:</span>
+			<span class="token keyword">return</span> parse_result<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span>
+		<span class="token keyword">else</span><span class="token punctuation">:</span>
+			<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Error cant get size"</span><span class="token punctuation">)</span>
+	<span class="token keyword">else</span><span class="token punctuation">:</span>
+		<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"file no exist!"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">load_json_file</span><span class="token punctuation">(</span>fil_path <span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">if</span> FileAccess<span class="token punctuation">.</span><span class="token function">file_exists</span><span class="token punctuation">(</span>fil_path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token keyword">var</span> data_file <span class="token operator">=</span> FileAccess<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span>fil_path<span class="token punctuation">,</span> FileAccess<span class="token punctuation">.</span><span class="token constant">READ</span><span class="token punctuation">)</span>
+		<span class="token keyword">var</span> parse_result <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse_string</span><span class="token punctuation">(</span>data_file<span class="token punctuation">.</span><span class="token function">get_as_text</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> parse_result <span class="token keyword">is</span> Array<span class="token punctuation">:</span>
+			<span class="token keyword">return</span> parse_result<span class="token punctuation">[</span>id<span class="token punctuation">]</span>
+		<span class="token keyword">else</span><span class="token punctuation">:</span>
+			<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Error reading file!"</span><span class="token punctuation">)</span>
+	<span class="token keyword">else</span><span class="token punctuation">:</span>
+		<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"file no exist!"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_spesific</span><span class="token punctuation">(</span>object<span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">var</span> item_data <span class="token operator">=</span> <span class="token function">load_json_file</span><span class="token punctuation">(</span>data_file_path<span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> item_data<span class="token punctuation">[</span>object<span class="token punctuation">]</span> 
+
+<span class="token keyword">func</span> <span class="token function">get_json_stats</span><span class="token punctuation">(</span>object<span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">var</span> item_data <span class="token operator">=</span> <span class="token function">load_json_file</span><span class="token punctuation">(</span>data_file_path<span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> item_data<span class="token punctuation">[</span><span class="token string">"stats"</span><span class="token punctuation">]</span><span class="token punctuation">[</span>object<span class="token punctuation">]</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_name</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token function">get_json_spesific</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_desc</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token function">get_json_spesific</span><span class="token punctuation">(</span><span class="token string">"desc"</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_ability</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token function">get_json_spesific</span><span class="token punctuation">(</span><span class="token string">"ability"</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_rarity</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token function">get_json_spesific</span><span class="token punctuation">(</span><span class="token string">"rarity"</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_element</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token function">get_json_spesific</span><span class="token punctuation">(</span><span class="token string">"element"</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_damage</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token function">get_json_stats</span><span class="token punctuation">(</span><span class="token string">"damage"</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_hp</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token function">get_json_stats</span><span class="token punctuation">(</span><span class="token string">"hp"</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_luck</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token function">get_json_stats</span><span class="token punctuation">(</span><span class="token string">"luck"</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_movment_speed</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token function">get_json_stats</span><span class="token punctuation">(</span><span class="token string">"movment_speed"</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">get_json_ball_speed</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token function">get_json_stats</span><span class="token punctuation">(</span><span class="token string">"ball_speed"</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span></code></pre>
+                    </div>
                 </div>
+
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('UI_item')">
+                        <h4>
+                        UI item code
+                        </h4>
+                        <img src="/CV/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="UI_item">
+                        <pre class="language-gdscript"><code class="language-gdscript"><span class="token keyword">extends</span> <span class="token class-name">Control</span>
+<span class="token keyword">var</span> labol_color <span class="token operator">=</span> <span class="token string">"blue"</span>
+<span class="token keyword">var</span> pros_color <span class="token operator">=</span> <span class="token string">"green"</span>
+<span class="token keyword">var</span> cons_color <span class="token operator">=</span> <span class="token string">"red"</span>
+<span class="token keyword">signal</span> yes_button_pressed
+<span class="token keyword">signal</span> no_button_pressed
+<span class="token keyword">var</span> random_item_index
+<span class="token keyword">var</span> item_stats <span class="token punctuation">:</span> <span class="token class-name">Array</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token keyword">var</span> item <span class="token punctuation">:</span> <span class="token class-name">Array</span>
+<span class="token keyword">var</span> item_index <span class="token punctuation">:</span> <span class="token class-name">Array</span>
+<span class="token keyword">var</span> item_url <span class="token operator">=</span> <span class="token string">"res://Assets/Img/Item Icons/"</span>
+<span class="token keyword">var</span> dot_png <span class="token operator">=</span> <span class="token string">".png"</span>
+
+<span class="token keyword">func</span> <span class="token function">_ready</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	item_stats <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+	<span class="token keyword">var</span> json <span class="token operator">=</span> <span class="token variable">$JsonData</span>
+	<span class="token keyword">var</span> json_size <span class="token operator">=</span> json<span class="token punctuation">.</span><span class="token function">json_file_size</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token variable">$Item</span><span class="token operator">/</span>BackPanel<span class="token operator">/</span>ItemName<span class="token punctuation">.</span><span class="token function">append_text</span><span class="token punctuation">(</span><span class="token string">"[font_size={20}][color="</span> <span class="token operator">+</span> 
+	labol_color <span class="token operator">+</span> <span class="token string">"][center][b]Select item[/b][/center][/color][/font_size]"</span><span class="token punctuation">)</span>
+	
+	<span class="token comment"># Ska göra till en loop för knapparna</span>
+	<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token function">range</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  
+		random_item_index <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token function">randi_range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> json_size<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">while</span> <span class="token punctuation">(</span>item_index<span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			random_item_index <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token function">randi_range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> json_size<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token function">add_to_item_stats</span><span class="token punctuation">(</span>json<span class="token punctuation">,</span> random_item_index<span class="token punctuation">)</span>
+		item<span class="token punctuation">.</span><span class="token function">append_array</span><span class="token punctuation">(</span><span class="token punctuation">[</span>item_stats<span class="token punctuation">]</span><span class="token punctuation">)</span>
+		item_index<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span>
+	<span class="token function">give_data_to_switch</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">show_ui_item</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token variable">$GetItem</span><span class="token punctuation">.</span><span class="token function">play</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">set_label_name</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">var</span> label_name <span class="token operator">=</span> <span class="token variable">$Item</span><span class="token operator">/</span>BackPanel<span class="token operator">/</span>ItemName
+	label_name<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token comment">#Namn kan inte vara över 34 tecken, anars försviner texten </span>
+	label_name<span class="token punctuation">.</span><span class="token function">append_text</span><span class="token punctuation">(</span><span class="token string">"[font_size={20}][color="</span> <span class="token operator">+</span> 
+	labol_color <span class="token operator">+</span> <span class="token string">"][center][b]"</span> <span class="token operator">+</span>
+	name <span class="token operator">+</span> <span class="token string">"[/b][/center][/color][/font_size]"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">set_image</span><span class="token punctuation">(</span>image_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token variable">$Item</span><span class="token operator">/</span>BackPanel<span class="token operator">/</span>ImagePanel<span class="token operator">/</span>Image<span class="token punctuation">.</span>texture <span class="token operator">=</span> <span class="token function">load</span><span class="token punctuation">(</span>item_url <span class="token operator">+</span> image_name <span class="token operator">+</span> dot_png<span class="token punctuation">)</span>
+
+
+<span class="token keyword">func</span> <span class="token function">set_decsription</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">var</span> decript <span class="token operator">=</span> <span class="token variable">$Item</span><span class="token operator">/</span>BackPanel<span class="token operator">/</span>Decription
+	decript<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">var</span> text_lengt <span class="token operator">=</span> <span class="token function">len</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span>
+	<span class="token keyword">var</span> count_pros <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token string">"&lt;green>"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> text_lengt <span class="token punctuation">)</span>
+	<span class="token keyword">var</span> count_cons <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token string">"&lt;red>"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> text_lengt <span class="token punctuation">)</span>
+	<span class="token keyword">var</span> word_index1 <span class="token operator">=</span> <span class="token number">0</span>
+	<span class="token keyword">var</span> word_index2 <span class="token operator">=</span> <span class="token number">0</span>
+	
+	<span class="token keyword">for</span> n <span class="token keyword">in</span> <span class="token function">range</span><span class="token punctuation">(</span>count_pros<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		word_index1 <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">"&lt;green>"</span><span class="token punctuation">,</span> word_index1<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">7</span>
+		word_index2 <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">"&lt;/green>"</span><span class="token punctuation">,</span> word_index1<span class="token punctuation">)</span>
+		<span class="token keyword">var</span> test <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">substr</span><span class="token punctuation">(</span>word_index1<span class="token punctuation">,</span> word_index2 <span class="token operator">-</span> word_index1<span class="token punctuation">)</span>
+		test <span class="token operator">=</span> test<span class="token punctuation">.</span><span class="token function">to_upper</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		text <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">replacen</span><span class="token punctuation">(</span>test<span class="token punctuation">,</span> test<span class="token punctuation">)</span>
+	
+	word_index1 <span class="token operator">=</span> <span class="token number">0</span>
+	word_index2 <span class="token operator">=</span> <span class="token number">0</span>
+	
+	<span class="token keyword">for</span> n <span class="token keyword">in</span> <span class="token function">range</span><span class="token punctuation">(</span>count_cons<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		word_index1 <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">"&lt;red>"</span><span class="token punctuation">,</span> word_index1<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">5</span>
+		word_index2 <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">"&lt;/red>"</span><span class="token punctuation">,</span> word_index1<span class="token punctuation">)</span>
+		<span class="token keyword">var</span> test <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">substr</span><span class="token punctuation">(</span>word_index1<span class="token punctuation">,</span> word_index2 <span class="token operator">-</span> word_index1<span class="token punctuation">)</span>
+		test <span class="token operator">=</span> test<span class="token punctuation">.</span><span class="token function">to_upper</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		text <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">replacen</span><span class="token punctuation">(</span>test<span class="token punctuation">,</span> test<span class="token punctuation">)</span>
+	
+	text <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">"&lt;green>"</span><span class="token punctuation">,</span> <span class="token string">"[color="</span> <span class="token operator">+</span> pros_color <span class="token operator">+</span> <span class="token string">"]"</span> <span class="token punctuation">)</span>
+	text <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">"&lt;/green>"</span><span class="token punctuation">,</span> <span class="token string">"[/color]"</span><span class="token punctuation">)</span>
+	text <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">"&lt;red>"</span><span class="token punctuation">,</span> <span class="token string">"[color="</span> <span class="token operator">+</span> cons_color <span class="token operator">+</span> <span class="token string">"]"</span><span class="token punctuation">)</span>
+	text <span class="token operator">=</span> text<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">"&lt;/red>"</span><span class="token punctuation">,</span> <span class="token string">"[/color]"</span><span class="token punctuation">)</span>
+
+	text <span class="token operator">=</span> <span class="token string">"[font_size={15}]"</span> <span class="token operator">+</span> text <span class="token operator">+</span> <span class="token string">" [/font_size]"</span>	
+	decript<span class="token punctuation">.</span><span class="token function">append_text</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">add_to_item_stats</span><span class="token punctuation">(</span>json<span class="token punctuation">,</span> random_item_index<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	item_stats <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get_json_name</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get_json_desc</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get_json_ability</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get_json_rarity</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get_json_element</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get_json_damage</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get_json_hp</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get_json_luck</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get_json_movment_speed</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get_json_ball_speed</span><span class="token punctuation">(</span>random_item_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token comment">#If you find a duplicet it upgrades that items stats </span>
+	item_stats<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">give_data_to_switch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">var</span> switch <span class="token operator">=</span> <span class="token variable">$UI_SwichItem</span>
+	switch<span class="token punctuation">.</span><span class="token function">on_item_start</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> item_index<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">_on_ui_swich_item_button_1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token function">set_label_name</span><span class="token punctuation">(</span><span class="token variable">$UI_SwichItem</span><span class="token punctuation">.</span>send_name<span class="token punctuation">)</span>
+	<span class="token function">set_image</span><span class="token punctuation">(</span><span class="token variable">$UI_SwichItem</span><span class="token punctuation">.</span>send_name<span class="token punctuation">)</span>
+	<span class="token function">set_decsription</span><span class="token punctuation">(</span><span class="token variable">$UI_SwichItem</span><span class="token punctuation">.</span>send_desc<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">_on_ui_swich_item_button_2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token function">set_label_name</span><span class="token punctuation">(</span><span class="token variable">$UI_SwichItem</span><span class="token punctuation">.</span>send_name<span class="token punctuation">)</span>
+	<span class="token function">set_image</span><span class="token punctuation">(</span><span class="token variable">$UI_SwichItem</span><span class="token punctuation">.</span>send_name<span class="token punctuation">)</span>
+	<span class="token function">set_decsription</span><span class="token punctuation">(</span><span class="token variable">$UI_SwichItem</span><span class="token punctuation">.</span>send_desc<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">_on_ui_swich_item_button_3</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token function">set_label_name</span><span class="token punctuation">(</span><span class="token variable">$UI_SwichItem</span><span class="token punctuation">.</span>send_name<span class="token punctuation">)</span>
+	<span class="token function">set_image</span><span class="token punctuation">(</span><span class="token variable">$UI_SwichItem</span><span class="token punctuation">.</span>send_name<span class="token punctuation">)</span>
+	<span class="token function">set_decsription</span><span class="token punctuation">(</span><span class="token variable">$UI_SwichItem</span><span class="token punctuation">.</span>send_desc<span class="token punctuation">)</span>
+
+
+<span class="token keyword">func</span> <span class="token function">_on_ui_swich_item_yes_button</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token function">hide</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -252,7 +490,15 @@
             <div class="project-content-background project-text-padding">
                 <h3>What I learned </h3>
                 <p>
-
+                    This being the first game project in a team, it was a great learning opportunity. I learned the importance of
+                    communicating ideas and deciding a direction to move a project forward, planning what we would need to make this
+                    project possible. Often I need to work on stuff I didn't know how they worked, but still match to deliver - quickly
+                    learning about systems and then needing to apply them to our project.
+                </p>
+                <p>
+                    Learned how important communication is in a team, knowing what others are working on and what things already were
+                    done. We both used Trello to keep track of what was done and what needed to be worked on, and a whiteboard writing
+                    what each one of use was working on.
                 </p>
             </div>
         </div>
@@ -263,6 +509,8 @@
 
     </main>
     <script src="/CV/scripts/app.js"></script>
+    <script src="/CV/scripts/prism.js"></script>
+
 
     
     <footer class="footer-background section">
