@@ -180,7 +180,7 @@
             <h1 class="center">Raccoon Rascal </h1>
             <h3 class="center">Chase and Run | Third-person </h3>
             <p>
-
+                Play as a mischievous raccoon stealing items while trying not to get caught.
             </p>
             <p>
                 Itch.io page: <a href="https://futuregames.itch.io/raccoonrascal">https://futuregames.itch.io/raccoonrascal</a>
@@ -194,7 +194,10 @@
             <div class="project-about-content project-text-padding">
                 <h3>Summary</h3>
                 <p>
-
+                    Raccoon Rascol is a third-person chase and run game, where I worked on Gameplay, System and UI programming. I go
+                    into more detail on how the spawning system works and in game UI. I learned from this project how to work in a team
+                    in Unity, got better at communication in a team, learning how to manage stress when working and changing plans when
+                    getting feedback.
                 </p>
             </div>
 
@@ -219,32 +222,864 @@
         </div>
         <div class="wrapper">
             <div class="project-content-background project-text-padding">
-
+        
                 <h3>Introduction</h3>
                 <p>
-
+                    Raccoon Rascol is a third-person chase and run game where you play as a mischievous raccoon stealing items
+                    while
+                    trying not to get caught. When items are brought back to the raccoons stash, the player gets buffs,
+                    increasing
+                    movement speed and jump power. There are also power ups scattered around the map increasing the movement
+                    speed and
+                    jump power.
                 </p>
+                <p>
+                    I worked on gameplay mechanics for example power ups and stash buffs. I also worked on systems like, item
+                    and power
+                    up spawners, shop system and money system. I did most of the in game Ui implementation and programming,
+                    connecting
+                    gameplay with the Ui.
+                </p>
+            </div>
+        </div>
+        
+        <div class="wrapper">
+            <div class="project-content-background project-text-padding">
+                <h3>Spawners</h3>
+                <div class="project-side-by-side">
+                    <div>
+                        <p>
+                            The game uses spawners for items and powerups that the player can collect, items gradually
+                            populating the level over
+                            time.
+                        </p>
+                        <p>
+                            Items and powerups spawn location is predetermined by using gameobjects that only hold a transform,
+                            using them
+                            as points for the spawning system.
+                        </p>
+                        <p>
+                            When an Item or powerup has populated a location others can't spawn on the same
+                            point until it has gotten removed, this makes it so there are two things on the same spawn point.
+                        </p>
+                    </div>
+                    <img class="center project-single-img" src="/CV/images/project_img/raccoon-rascal/item.webp" alt="">
+                </div>
+        
+                <div class="project-side-by-side" data-layout="column-reverse">
+                    <img class="project-single-img" src="/CV/images/project_img/raccoon-rascal/item-and-buff-compresst.webp" alt="">
+                    <p>
+                        Power ups use an arrow and differences in color to make it easier to see what kind of power up it is. A
+                        yellow arrow
+                        pointing up is a jump buff and a green arrow pointing forward is a speed buff. These buffs last a couple
+                        of seconds.
+                    </p>
+                </div>
+                <div class="project-side-by-side">
+                    <div>
+                        <p>
+                            Items have different colored outlines both in game and when in the inventory, to showcase different
+                            rarities, rarer
+                            items being worth more than more common ones.
+                        </p>
+                    </div>
+                    <img class="center project-single-img" src="/CV/images/project_img/raccoon-rascal/item-diffrent-color-compresst.webp" alt="">
+                </div>
+                
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('spawner_code')">
+                        <h4>
+                        Spawner Code
+                        </h4>
+                        <img src="/CV/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="spawner_code">
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Unity<span class="token punctuation">.</span>Properties</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">UnityEngine</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">UnityEngine<span class="token punctuation">.</span>Video</span><span class="token punctuation">;</span>
+
+<span class="token comment">//Base Spawner</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Spawner</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">MonoBehaviour</span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">struct</span> <span class="token class-name">SpawnPoint</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">public</span> <span class="token class-name">Transform</span> point<span class="token punctuation">;</span>
+        <span class="token keyword">public</span> <span class="token class-name"><span class="token keyword">bool</span></span> isNotPlaceable<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">protected</span> <span class="token class-name">Transform</span> spawnHolder<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">protected</span> <span class="token class-name">List<span class="token punctuation">&lt;</span>Transform<span class="token punctuation">></span></span> initialSpawnPoints <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">Header</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"Only use one rarity in the spawn list, or it may break!!!"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">protected</span> <span class="token class-name">List<span class="token punctuation">&lt;</span>GameObject<span class="token punctuation">></span></span> initialSpawnList <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">protected</span> <span class="token class-name">Dictionary<span class="token punctuation">&lt;</span>GameObject<span class="token punctuation">,</span> Transform<span class="token punctuation">></span></span> spawnedItem <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">protected</span> <span class="token class-name">List<span class="token punctuation">&lt;</span>SpawnPoint<span class="token punctuation">></span></span> spawnPointList <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">protected</span> <span class="token class-name"><span class="token keyword">int</span></span> maxAmountOfItems <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">protected</span> <span class="token class-name"><span class="token keyword">int</span></span> itemsInScene <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">protected</span> <span class="token class-name"><span class="token keyword">float</span></span> amountToSpawnPerTick <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">protected</span> <span class="token class-name"><span class="token keyword">float</span></span> spawnTime <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+    <span class="token keyword">protected</span> <span class="token class-name"><span class="token keyword">float</span></span> timer <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">protected</span> <span class="token class-name"><span class="token keyword">bool</span></span> canSpawn <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name"><span class="token keyword">bool</span></span> IsSpawnerActive <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">LootData<span class="token punctuation">.</span>Rarity</span> RarityLabel<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>initialSpawnPoints<span class="token punctuation">.</span>Count <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            Debug<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span>gameObject<span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string">": Have no spawn points"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>initialSpawnList<span class="token punctuation">.</span>Count <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            Debug<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span>gameObject<span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string">": Have no item to spawn"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name">Transform</span> item <span class="token keyword">in</span> initialSpawnPoints<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token class-name">SpawnPoint</span> tempSpawnPoint <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">SpawnPoint</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            tempSpawnPoint<span class="token punctuation">.</span>point <span class="token operator">=</span> item<span class="token punctuation">;</span>
+            tempSpawnPoint<span class="token punctuation">.</span>isNotPlaceable <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+            spawnPointList<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>tempSpawnPoint<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">protected</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SpawnTimer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>timer <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            timer <span class="token operator">-=</span> Time<span class="token punctuation">.</span>deltaTime<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">{</span>
+            canSpawn <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">virtual</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Spawn</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">virtual</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SpawnItem</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> index<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+
+        <span class="token class-name">SpawnPoint</span> tempSpawnPoint <span class="token operator">=</span> spawnPointList<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        tempSpawnPoint<span class="token punctuation">.</span>isNotPlaceable <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token class-name">GameObject</span> tempObject <span class="token operator">=</span> initialSpawnList<span class="token punctuation">[</span>Random<span class="token punctuation">.</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> initialSpawnList<span class="token punctuation">.</span>Count<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token class-name">GameObject</span> currentObject <span class="token operator">=</span> <span class="token function">Instantiate</span><span class="token punctuation">(</span>tempObject<span class="token punctuation">,</span> tempSpawnPoint<span class="token punctuation">.</span>point<span class="token punctuation">.</span>position<span class="token punctuation">,</span> tempObject<span class="token punctuation">.</span>transform<span class="token punctuation">.</span>rotation<span class="token punctuation">,</span> spawnHolder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        itemsInScene<span class="token operator">++</span><span class="token punctuation">;</span>
+        spawnedItem<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>currentObject<span class="token punctuation">,</span> tempSpawnPoint<span class="token punctuation">.</span>point<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        spawnPointList<span class="token punctuation">[</span>index<span class="token punctuation">]</span> <span class="token operator">=</span> tempSpawnPoint<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">virtual</span> <span class="token return-type class-name"><span class="token keyword">bool</span></span> <span class="token function">RemoveItem</span><span class="token punctuation">(</span><span class="token class-name">GameObject</span> item<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>spawnedItem<span class="token punctuation">.</span><span class="token function">ContainsKey</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token class-name">SpawnPoint</span> temp <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name"><span class="token keyword">int</span></span> index <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name">SpawnPoint</span> spawnPoint <span class="token keyword">in</span> spawnPointList<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>spawnPoint<span class="token punctuation">.</span>point <span class="token operator">==</span> spawnedItem<span class="token punctuation">[</span>item<span class="token punctuation">]</span><span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                temp <span class="token operator">=</span> spawnPoint<span class="token punctuation">;</span>
+                temp<span class="token punctuation">.</span>isNotPlaceable <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+                index <span class="token operator">=</span> spawnPointList<span class="token punctuation">.</span><span class="token function">IndexOf</span><span class="token punctuation">(</span>spawnPoint<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        spawnPointList<span class="token punctuation">[</span>index<span class="token punctuation">]</span> <span class="token operator">=</span> temp<span class="token punctuation">;</span>
+
+        itemsInScene<span class="token operator">--</span><span class="token punctuation">;</span>
+        spawnedItem<span class="token punctuation">.</span><span class="token function">Remove</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">Destroy</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token comment">//Random Spawner</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RandomSpawner</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Spawner</span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Update</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>IsSpawnerActive <span class="token operator">&amp;&amp;</span> itemsInScene <span class="token operator">&lt;</span> maxAmountOfItems<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>canSpawn<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                <span class="token function">Spawn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                canSpawn <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+                timer <span class="token operator">=</span> spawnTime<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">else</span>
+            <span class="token punctuation">{</span>
+                <span class="token function">SpawnTimer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Spawn</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token class-name"><span class="token keyword">int</span></span> randomIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> amountToSpawnPerTick<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token class-name"><span class="token keyword">bool</span></span> runningRandomizer <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token class-name"><span class="token keyword">int</span></span> failedAttempt <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span>runningRandomizer<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">Randomizer</span><span class="token punctuation">(</span><span class="token keyword">ref</span> randomIndex<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">{</span>
+                    <span class="token function">SpawnItem</span><span class="token punctuation">(</span>randomIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    runningRandomizer <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token keyword">else</span>
+                <span class="token punctuation">{</span>
+                    failedAttempt<span class="token operator">++</span><span class="token punctuation">;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>failedAttempt <span class="token operator">>=</span> <span class="token number">10</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">{</span>
+                        Debug<span class="token punctuation">.</span><span class="token function">Log</span><span class="token punctuation">(</span><span class="token string">"failed to many times, break loop"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">break</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">bool</span></span> <span class="token function">Randomizer</span><span class="token punctuation">(</span><span class="token keyword">ref</span> <span class="token class-name"><span class="token keyword">int</span></span> randomIndex<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        randomIndex <span class="token operator">=</span> Random<span class="token punctuation">.</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> spawnPointList<span class="token punctuation">.</span>Count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token operator">!</span>spawnPointList<span class="token punctuation">[</span>randomIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>isNotPlaceable<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+                    </div>
+                </div>
+                        
             </div>
         </div>
 
         <div class="wrapper">
             <div class="project-content-background project-text-padding">
-                <h3>Subject</h3>
-                <p>
-
-                </p>
+                <h3>Gameplay Ui</h3>
                 <div class="project-side-by-side">
                     <div>
                         <p>
+                            The In game UI uses a UI manager that takes and sends C# events when the appropriate gameplay event
+                            occurs. The inventory is updated every time an item gets picked up, adding the item to the inventory
+                            and updating the points counter. When reaching the raccoon stash the item points gets cashed in and
+                            gets added to the money UI.
                         </p>
                     </div>
-                    <img class="center project-single-img" src="/CV/images/project_img/raccoon-rascal/" alt="">
+                    <img class="center project-single-img" src="/CV/images/project_img/raccoon-rascal/start-compresst.webp" alt="">
+                </div>
+        
+                <div class="project-side-by-side" data-layout="column-reverse">
+                    <img class="project-single-img" src="/CV/images/project_img/raccoon-rascal/fild-bar-compresst.webp" alt="">
+                    <p>
+                        When chasing in the greed slider gets increased, when reaching a certain level of greed a buff gets
+                        added to the raccoon. The item in the inventory Ui reflects the rarity of the item having the same
+                        color.
+                    </p>
+                </div>
+                <div class="project-side-by-side">
+                    <div>
+                        <p>
+                            When finishing a run the money that the player has gathered and gets saved, so it can be used in the
+                            skins menu. The player can purchase skins for the raccoons both for changing the color of the
+                            raccoon and having different hats.
+                        </p>
+                        <p>
+                            When opening the game a save file gets loaded and read, looking if any skins are unlocked, if it is
+                            unlocked it sets a scriptable object that holds data of skins and hats to unlock, making it possible
+                            for the player to use it in game. When buying accessories the system unlocks the scriptable object,
+                            and writes to the save file saying the accessory in question is now unlocked.
+                        </p>
+                    </div>
+                    <img class="center project-single-img" src="/CV/images/project_img/raccoon-rascal/skins.webp" alt="">
+                </div>
+                <div class="project-side-by-side" data-layout="column-reverse">
+                    <img class="project-single-img" src="/CV/images/project_img/raccoon-rascal/skins-ingame-compresst.webp" alt="">
+                    <p>
+                        Whatever skin or accessory was selected in the skins menu gets reflected in the in game.
+                    </p>
+                </div>
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('greed_system')">
+                        <h4>
+                        Greed system
+                        </h4>
+                        <img src="/CV/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="greed_system">
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">TMPro</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">UnityEngine</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">UnityEngine<span class="token punctuation">.</span>UI</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GreedSystem</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">MonoBehaviour</span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">ActivityState</span>
+    <span class="token punctuation">{</span>
+        SystemOff<span class="token punctuation">,</span>
+        SystemOn<span class="token punctuation">,</span>
+        GreedPowerUp
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">GreedState</span>
+    <span class="token punctuation">{</span>
+        StageOne<span class="token punctuation">,</span>
+        StageTwo<span class="token punctuation">,</span>
+        StageThree<span class="token punctuation">,</span>
+        StageFour<span class="token punctuation">,</span>
+        StageFive<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action<span class="token punctuation">&lt;</span><span class="token keyword">float</span><span class="token punctuation">></span></span> OnGreedLevelUpdate<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action<span class="token punctuation">&lt;</span><span class="token keyword">float</span><span class="token punctuation">,</span> <span class="token keyword">float</span><span class="token punctuation">></span></span> OnGreedStart<span class="token punctuation">;</span>
+
+
+    <span class="token comment">// move to a ui manger </span>
+    <span class="token punctuation">[</span>SerializeField<span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">AnimationCurve</span> greedCurve<span class="token punctuation">;</span>
+
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name"><span class="token keyword">float</span></span> minGreedLevel <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> maxGreedLevel <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name"><span class="token keyword">float</span></span> currentGreedLevel<span class="token punctuation">;</span>
+
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name"><span class="token keyword">float</span></span> startingCurvePoint<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name"><span class="token keyword">float</span></span> currentCurvePoint<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">Header</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"DONT BUT IT ON 0"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name"><span class="token keyword">float</span></span> curveBalancingValue <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">ActivityState</span> gameState<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">NonSerialized</span></span><span class="token punctuation">]</span> <span class="token keyword">public</span> <span class="token class-name">GreedState</span> greedState<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        UiManger<span class="token punctuation">.</span>Instance<span class="token punctuation">.</span>OnAddToGreedLevel <span class="token operator">+=</span> UiManger_UpdateCurvePoint<span class="token punctuation">;</span>
+        <span class="token function">StartCoroutine</span><span class="token punctuation">(</span><span class="token function">WaitForConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        currentCurvePoint <span class="token operator">=</span> startingCurvePoint<span class="token punctuation">;</span>
+        gameState <span class="token operator">=</span> ActivityState<span class="token punctuation">.</span>SystemOn<span class="token punctuation">;</span>
+        GameManger<span class="token punctuation">.</span>Instance<span class="token punctuation">.</span><span class="token function">BuffsForGreedState</span><span class="token punctuation">(</span>greedState<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name">IEnumerator</span> <span class="token function">WaitForConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">yield</span> <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        OnGreedStart<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span>minGreedLevel<span class="token punctuation">,</span> maxGreedLevel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Update</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>gameState <span class="token operator">==</span> ActivityState<span class="token punctuation">.</span>GreedPowerUp <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>PowerUpSystem<span class="token punctuation">.</span>Instance<span class="token punctuation">.</span>GreedPowerUp<span class="token punctuation">.</span>isActive<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            gameState <span class="token operator">=</span> ActivityState<span class="token punctuation">.</span>SystemOn<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>gameState <span class="token operator">==</span> ActivityState<span class="token punctuation">.</span>SystemOn<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>PowerUpSystem<span class="token punctuation">.</span>Instance<span class="token punctuation">.</span>GreedPowerUp<span class="token punctuation">.</span>isActive<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                gameState <span class="token operator">=</span> ActivityState<span class="token punctuation">.</span>GreedPowerUp<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token function">ObservingGreedState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token function">ManagingGreedLevel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>currentGreedLevel <span class="token operator">&lt;=</span> minGreedLevel<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">GameOver</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        gameState <span class="token operator">=</span> ActivityState<span class="token punctuation">.</span>SystemOff<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ObservingGreedState</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token class-name">GreedState</span> tempGreedState <span class="token operator">=</span> greedState<span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>currentGreedLevel <span class="token operator">>=</span> <span class="token punctuation">(</span>maxGreedLevel <span class="token operator">/</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">4</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            greedState <span class="token operator">=</span> GreedState<span class="token punctuation">.</span>StageFive<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>currentGreedLevel <span class="token operator">>=</span> <span class="token punctuation">(</span>maxGreedLevel <span class="token operator">/</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">3</span> <span class="token operator">&amp;&amp;</span> currentGreedLevel <span class="token operator">&lt;=</span> <span class="token punctuation">(</span>maxGreedLevel <span class="token operator">/</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">4</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            greedState <span class="token operator">=</span> GreedState<span class="token punctuation">.</span>StageFour<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>currentGreedLevel <span class="token operator">>=</span> <span class="token punctuation">(</span>maxGreedLevel <span class="token operator">/</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span> <span class="token operator">&amp;&amp;</span> currentGreedLevel <span class="token operator">&lt;=</span> <span class="token punctuation">(</span>maxGreedLevel <span class="token operator">/</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">3</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            greedState <span class="token operator">=</span> GreedState<span class="token punctuation">.</span>StageThree<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>currentGreedLevel <span class="token operator">>=</span> <span class="token punctuation">(</span>maxGreedLevel <span class="token operator">/</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span> currentGreedLevel <span class="token operator">&lt;=</span> <span class="token punctuation">(</span>maxGreedLevel <span class="token operator">/</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            greedState <span class="token operator">=</span> GreedState<span class="token punctuation">.</span>StageTwo<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">{</span>
+            greedState <span class="token operator">=</span> GreedState<span class="token punctuation">.</span>StageOne<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>greedState <span class="token operator">!=</span> tempGreedState<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            GameManger<span class="token punctuation">.</span>Instance<span class="token punctuation">.</span><span class="token function">BuffsForGreedState</span><span class="token punctuation">(</span>greedState<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ManagingGreedLevel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>currentGreedLevel <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            currentGreedLevel <span class="token operator">-=</span> greedCurve<span class="token punctuation">.</span><span class="token function">Evaluate</span><span class="token punctuation">(</span>currentCurvePoint<span class="token punctuation">)</span> <span class="token operator">*</span> Time<span class="token punctuation">.</span>deltaTime<span class="token punctuation">;</span>
+            OnGreedLevelUpdate<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span>currentGreedLevel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SuppressGreedLevel</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">float</span></span> suppressionValue<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>currentGreedLevel <span class="token operator">+</span> suppressionValue <span class="token operator">></span> maxGreedLevel<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            currentGreedLevel <span class="token operator">=</span> maxGreedLevel<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">{</span>
+            currentGreedLevel <span class="token operator">+=</span> suppressionValue<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">UiManger_UpdateCurvePoint</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> score<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">SuppressGreedLevel</span><span class="token punctuation">(</span>score<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        currentCurvePoint <span class="token operator">+=</span> score <span class="token operator">/</span> curveBalancingValue<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+                    </div>
+                </div>	
+
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('UI_manager')">
+                        <h4>
+                            UI manger
+                        </h4>
+                        <img src="/CV/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="UI_manager">
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">UnityEditor</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">UnityEngine</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UiManger</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">MonoBehaviour</span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">UiManger</span> Instance<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action<span class="token punctuation">&lt;</span><span class="token keyword">int</span><span class="token punctuation">></span></span> OnScoreUpdate<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action<span class="token punctuation">&lt;</span><span class="token keyword">int</span><span class="token punctuation">></span></span> OnAddToGreedLevel<span class="token punctuation">;</span>
+
+
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action<span class="token punctuation">&lt;</span><span class="token keyword">float</span><span class="token punctuation">></span></span> OnGreedLevelUpdate<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action<span class="token punctuation">&lt;</span><span class="token keyword">float</span><span class="token punctuation">,</span> <span class="token keyword">float</span><span class="token punctuation">></span></span> OnGreedStart<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action<span class="token punctuation">&lt;</span>LootData<span class="token punctuation">></span></span> OnGettingLoot<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action<span class="token punctuation">&lt;</span>List<span class="token punctuation">&lt;</span>LootData<span class="token punctuation">></span><span class="token punctuation">></span></span> OnGettingLootToStash<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action<span class="token punctuation">&lt;</span><span class="token keyword">int</span><span class="token punctuation">></span></span> OnUiChange<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action</span> OnInventoryFull<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">event</span> <span class="token class-name">Action</span> OnInventoryClear<span class="token punctuation">;</span>
+
+
+    <span class="token keyword">private</span> <span class="token class-name">GreedSystem</span> greedSystem<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">ScoreSystem</span> scoreSystem<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">ItemsManager</span> itemsManger<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">DetectHuman</span> detectHuman<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">InventoryUIManager</span> inventoryUIManager<span class="token punctuation">;</span>
+
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">GameObject</span> gameOverCanvas<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">GameObject</span> mainCanvas<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">GameObject</span> pauseCanvas<span class="token punctuation">;</span>
+
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">GameObject</span> ToStash<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">GameObject</span> ToStashBecon<span class="token punctuation">;</span>
+
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">GameOverMenu</span> gameOverMenu<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name"><span class="token keyword">int</span></span> currentScore<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Awake</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>Instance <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token function">DontDestroyOnLoad</span><span class="token punctuation">(</span>gameObject<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Instance <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        greedSystem <span class="token operator">=</span> <span class="token generic-method"><span class="token function">FindFirstObjectByType</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>GreedSystem<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        scoreSystem <span class="token operator">=</span> <span class="token generic-method"><span class="token function">FindFirstObjectByType</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>ScoreSystem<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        itemsManger <span class="token operator">=</span> <span class="token generic-method"><span class="token function">FindFirstObjectByType</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>ItemsManager<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        detectHuman <span class="token operator">=</span> <span class="token generic-method"><span class="token function">FindFirstObjectByType</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>DetectHuman<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        inventoryUIManager <span class="token operator">=</span> <span class="token generic-method"><span class="token function">FindFirstObjectByType</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>InventoryUIManager<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>greedSystem <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> scoreSystem <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> itemsManger <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            Debug<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span><span class="token string">"Greed, score or item system is not in the scene"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>gameOverCanvas <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> mainCanvas <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            Debug<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span><span class="token string">"Dose not have Game over or main canvas"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        currentScore <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+        GameManger<span class="token punctuation">.</span>Instance<span class="token punctuation">.</span>OnPauseGame <span class="token operator">+=</span> GameManger_PauseState<span class="token punctuation">;</span>
+
+        scoreSystem<span class="token punctuation">.</span>OnScoreIncrease <span class="token operator">+=</span> ScoreSystem_ScoreUpdate<span class="token punctuation">;</span>
+
+        greedSystem<span class="token punctuation">.</span>OnGreedStart <span class="token operator">+=</span> GreedSystem_OnStart<span class="token punctuation">;</span>
+        greedSystem<span class="token punctuation">.</span>OnGreedLevelUpdate <span class="token operator">+=</span> GreedSystem_GreedUpdate<span class="token punctuation">;</span>
+
+        itemsManger<span class="token punctuation">.</span>OnStashHasItems <span class="token operator">+=</span> ItemsManger_GivenItems<span class="token punctuation">;</span>
+        itemsManger<span class="token punctuation">.</span>OnInventoryFull <span class="token operator">+=</span> ItemManager_FullInventory<span class="token punctuation">;</span>
+        itemsManger<span class="token punctuation">.</span>OnStashHasItems <span class="token operator">+=</span> ItemManager_ClearInventory<span class="token punctuation">;</span>
+        itemsManger<span class="token punctuation">.</span>OnGettingLoot <span class="token operator">+=</span> ItemManager_GettingLoot<span class="token punctuation">;</span>
+        itemsManger<span class="token punctuation">.</span>OnMaxInventoryIncreased <span class="token operator">+=</span> ItemManger_ChangeToStash<span class="token punctuation">;</span>
+
+        inventoryUIManager<span class="token punctuation">.</span>OnUiChanged <span class="token operator">+=</span> InventoryUIManager_ChangedUi<span class="token punctuation">;</span>
+
+        detectHuman<span class="token punctuation">.</span>HumanDetected <span class="token operator">+=</span> DetectHumanOnHumanDetected<span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DetectHumanOnHumanDetected</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        mainCanvas<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        gameOverCanvas<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        GameManger<span class="token punctuation">.</span>Instance<span class="token punctuation">.</span><span class="token function">ChangeState</span><span class="token punctuation">(</span>GameManger<span class="token punctuation">.</span>GameState<span class="token punctuation">.</span>GameOver<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        gameOverMenu<span class="token punctuation">.</span><span class="token function">SetEndValues</span><span class="token punctuation">(</span>currentScore<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ScoreSystem_ScoreUpdate</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> score<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        DataManager<span class="token punctuation">.</span><span class="token function">AddMoney</span><span class="token punctuation">(</span>score<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        currentScore <span class="token operator">+=</span> score<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>currentScore <span class="token operator">></span> DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>HighScore<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>HighScore <span class="token operator">=</span> currentScore<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        OnAddToGreedLevel<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span>score<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        OnScoreUpdate<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span>currentScore<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">GreedSystem_OnStart</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">float</span></span> minGreed<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">float</span></span> maxGreed<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        OnGreedStart<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span>minGreed<span class="token punctuation">,</span> maxGreed<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">GreedSystem_GreedUpdate</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">float</span></span> greedLevel<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        OnGreedLevelUpdate<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span>greedLevel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ItemManager_ClearInventory</span><span class="token punctuation">(</span><span class="token class-name">List<span class="token punctuation">&lt;</span>LootData<span class="token punctuation">></span></span> data<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name">LootData</span> item <span class="token keyword">in</span> data<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            DataManager<span class="token punctuation">.</span><span class="token function">AddLootToData</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        ToStash<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ToStashBecon<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        OnInventoryClear<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ItemManager_FullInventory</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        ToStash<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ToStashBecon<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        OnInventoryFull<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ItemsManger_GivenItems</span><span class="token punctuation">(</span><span class="token class-name">List<span class="token punctuation">&lt;</span>LootData<span class="token punctuation">></span></span> loot<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        OnGettingLootToStash<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span>loot<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ItemManager_GettingLoot</span><span class="token punctuation">(</span><span class="token class-name">LootData</span> lootData<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        OnGettingLoot<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span>lootData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ItemManger_ChangeToStash</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        ToStash<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ToStashBecon<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">InventoryUIManager_ChangedUi</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> maxInventory<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        OnUiChange<span class="token punctuation">?.</span><span class="token function">Invoke</span><span class="token punctuation">(</span>maxInventory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">GameManger_PauseState</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">bool</span></span> state<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        mainCanvas<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token operator">!</span>state<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pauseCanvas<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+                    </div>
+
                 </div>
 
-                <div class="project-side-by-side" data-layout="column-reverse">
-                    <img class="project-single-img" src="/CV/images/project_img/raccoon-rascal/" alt="">
-                    <p>
-                    </p>
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('skins_system')">
+                        <h4>
+                        Skins system
+                        </h4>
+                        <img src="/CV/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="skins_system">
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>ComponentModel</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Net<span class="token punctuation">.</span>Http<span class="token punctuation">.</span>Headers</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">TMPro</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Unity<span class="token punctuation">.</span>Collections</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Unity<span class="token punctuation">.</span>VisualScripting</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Unity<span class="token punctuation">.</span>VisualScripting<span class="token punctuation">.</span>Dependencies<span class="token punctuation">.</span>Sqlite</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">UnityEngine</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">UnityEngine<span class="token punctuation">.</span>SceneManagement</span><span class="token punctuation">;</span>
+
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomeChanger</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">MonoBehaviour</span></span>
+<span class="token punctuation">{</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">List<span class="token punctuation">&lt;</span>HatUnlock<span class="token punctuation">></span></span> hats <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">List<span class="token punctuation">&lt;</span>SkinUnlock<span class="token punctuation">></span></span> raccoonSkins <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">Renderer</span> raccoonRenderer<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">Transform</span> hatHolder<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">GameObject</span> hatBuyUi<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">TextMeshProUGUI</span> hatCostUi<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">GameObject</span> skinBuyUi<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">TextMeshProUGUI</span> skinCostUi<span class="token punctuation">;</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">SerializeField</span></span><span class="token punctuation">]</span> <span class="token keyword">private</span> <span class="token class-name">TextMeshProUGUI</span> moneyUi<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name"><span class="token keyword">int</span></span> hatIndex<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name"><span class="token keyword">int</span></span> skinIndex<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name"><span class="token keyword">int</span></span> nextScene<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>raccoonRenderer <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            Debug<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span><span class="token string">"No raccoon renderer!!!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>hatHolder <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            Debug<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span><span class="token string">"No hat holder!!!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentHatName <span class="token operator">==</span> <span class="token string">""</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentHatName <span class="token operator">=</span> hats<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentSkinName <span class="token operator">==</span> <span class="token string">""</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentSkinName <span class="token operator">=</span> raccoonSkins<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token function">UpdateMoneyUi</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">HatStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">SkinStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">UpdateMoneyUi</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        moneyUi<span class="token punctuation">.</span>text <span class="token operator">=</span> <span class="token string">"$ "</span> <span class="token operator">+</span> DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentMoney<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">HatStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> hats<span class="token punctuation">.</span>Count<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>hats<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>name <span class="token operator">==</span> DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentHatName<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                hatIndex <span class="token operator">=</span> i<span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        Debug<span class="token punctuation">.</span><span class="token function">Log</span><span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentHatName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Debug<span class="token punctuation">.</span><span class="token function">Log</span><span class="token punctuation">(</span>hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>hatHolder<span class="token punctuation">.</span>childCount <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token function">Instantiate</span><span class="token punctuation">(</span>hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>HatPrefab<span class="token punctuation">,</span> hatHolder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">{</span>
+            <span class="token function">Destroy</span><span class="token punctuation">(</span>hatHolder<span class="token punctuation">.</span><span class="token function">GetChild</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>gameObject<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">Instantiate</span><span class="token punctuation">(</span>hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>HatPrefab<span class="token punctuation">,</span> hatHolder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SkinStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> raccoonSkins<span class="token punctuation">.</span>Count<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>raccoonSkins<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>name <span class="token operator">==</span> DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentSkinName<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                skinIndex <span class="token operator">=</span> i<span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        Debug<span class="token punctuation">.</span><span class="token function">Log</span><span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentSkinName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Debug<span class="token punctuation">.</span><span class="token function">Log</span><span class="token punctuation">(</span>raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        raccoonRenderer<span class="token punctuation">.</span>material <span class="token operator">=</span> raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>RaccoonMaterial<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">IsItemUnlocked</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">bool</span></span> isUnlocked<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">int</span></span> itemCost<span class="token punctuation">,</span> <span class="token keyword">ref</span> <span class="token class-name">GameObject</span> buyButton<span class="token punctuation">,</span> <span class="token keyword">ref</span> <span class="token class-name">TextMeshProUGUI</span> moneyText<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>isUnlocked<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            buyButton<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            moneyText<span class="token punctuation">.</span>gameObject<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">{</span>
+            buyButton<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            moneyText<span class="token punctuation">.</span>gameObject<span class="token punctuation">.</span><span class="token function">SetActive</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            moneyText<span class="token punctuation">.</span>text <span class="token operator">=</span> <span class="token string">"Cost: "</span> <span class="token operator">+</span> itemCost<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">HatChange</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> direction<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        hatIndex <span class="token operator">+=</span> direction<span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>hatIndex <span class="token operator">>=</span> hats<span class="token punctuation">.</span>Count<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            hatIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>hatIndex <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            hatIndex <span class="token operator">=</span> hats<span class="token punctuation">.</span>Count <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token function">IsItemUnlocked</span><span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span><span class="token function">IsHatUnlocked</span><span class="token punctuation">(</span>hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>Cost<span class="token punctuation">,</span> <span class="token keyword">ref</span> hatBuyUi<span class="token punctuation">,</span> <span class="token keyword">ref</span> hatCostUi<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>hatHolder<span class="token punctuation">.</span>childCount <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token function">Instantiate</span><span class="token punctuation">(</span>hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>HatPrefab<span class="token punctuation">,</span> hatHolder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">{</span>
+            <span class="token function">Destroy</span><span class="token punctuation">(</span>hatHolder<span class="token punctuation">.</span><span class="token function">GetChild</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>gameObject<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">Instantiate</span><span class="token punctuation">(</span>hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>HatPrefab<span class="token punctuation">,</span> hatHolder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SkinChange</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> direction<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        skinIndex <span class="token operator">+=</span> direction<span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>skinIndex <span class="token operator">>=</span> raccoonSkins<span class="token punctuation">.</span>Count<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            skinIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>skinIndex <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            skinIndex <span class="token operator">=</span> raccoonSkins<span class="token punctuation">.</span>Count <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token function">IsItemUnlocked</span><span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span><span class="token function">IsSkinUnlocked</span><span class="token punctuation">(</span>raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>Cost<span class="token punctuation">,</span> <span class="token keyword">ref</span> skinBuyUi<span class="token punctuation">,</span> <span class="token keyword">ref</span> skinCostUi<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        raccoonRenderer<span class="token punctuation">.</span>material <span class="token operator">=</span> raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>RaccoonMaterial<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">BuyHat</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentMoney <span class="token operator">>=</span> hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>Cost<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            DataManager<span class="token punctuation">.</span><span class="token function">ChangeHatsUnlocked</span><span class="token punctuation">(</span>hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">IsItemUnlocked</span><span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span><span class="token function">IsHatUnlocked</span><span class="token punctuation">(</span>hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>Cost<span class="token punctuation">,</span> <span class="token keyword">ref</span> hatBuyUi<span class="token punctuation">,</span> <span class="token keyword">ref</span> hatCostUi<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            DataManager<span class="token punctuation">.</span><span class="token function">RemoveMoney</span><span class="token punctuation">(</span>hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>Cost<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">UpdateMoneyUi</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">BuySkin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentMoney <span class="token operator">>=</span> raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>Cost<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            DataManager<span class="token punctuation">.</span><span class="token function">ChangeSkinsUnlocked</span><span class="token punctuation">(</span>raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">IsItemUnlocked</span><span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span><span class="token function">IsSkinUnlocked</span><span class="token punctuation">(</span>raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>Cost<span class="token punctuation">,</span> <span class="token keyword">ref</span> skinBuyUi<span class="token punctuation">,</span> <span class="token keyword">ref</span> skinCostUi<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            DataManager<span class="token punctuation">.</span><span class="token function">RemoveMoney</span><span class="token punctuation">(</span>raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>Cost<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">UpdateMoneyUi</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SaveChanges</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span><span class="token function">IsHatUnlocked</span><span class="token punctuation">(</span>hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            DataManager<span class="token punctuation">.</span>CurrentHat <span class="token operator">=</span> hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentHatName <span class="token operator">=</span> hats<span class="token punctuation">[</span>hatIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>DataManager<span class="token punctuation">.</span><span class="token function">IsSkinUnlocked</span><span class="token punctuation">(</span>raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            DataManager<span class="token punctuation">.</span>CurrentSkin <span class="token operator">=</span> raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            DataManager<span class="token punctuation">.</span>MyPlayerData<span class="token punctuation">.</span>CurrentSkinName <span class="token operator">=</span> raccoonSkins<span class="token punctuation">[</span>skinIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        SaveSystem<span class="token punctuation">.</span><span class="token function">SavePlayerData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ChangingScene</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> sceneIndex<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        nextScene <span class="token operator">=</span> sceneIndex<span class="token punctuation">;</span>
+        SaveSystem<span class="token punctuation">.</span>IsSaved <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token function">SaveChanges</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">StartCoroutine</span><span class="token punctuation">(</span><span class="token function">WaitForSaveData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name">IEnumerator</span> <span class="token function">WaitForSaveData</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>SaveSystem<span class="token punctuation">.</span>IsSaved<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">yield</span> <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        SceneManager<span class="token punctuation">.</span><span class="token function">LoadScene</span><span class="token punctuation">(</span>nextScene<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SceneLoad</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">ChangingScene</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Back</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">ChangingScene</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+                    </div>
                 </div>
             </div>
         </div>
@@ -253,7 +1088,28 @@
             <div class="project-content-background project-text-padding">
                 <h3>What I learned </h3>
                 <p>
-
+                    Got better at working in a team inside Unity, keeping a consistent code style and codebase, communicating on what I
+                    am working on to others so we don't work on the same thing at the same time, and using Unity's Perforce integration
+                    to minimise the risk of merge conflicts.
+                </p>
+                <p>
+                    I learned how to use Perforce and Jira as this was the first time using these tools. Perforce took some time to get
+                    used to and work with, but I found the feature of seeing which files other people were working on super useful for.
+                    Jira was easier to grasp being similar to tools like Trello, so I already had some experience working with these
+                    types of tools. I liked the function of ordering things by epics so it was easier to see how far along a feature
+                    was, and what was done inside of it.
+                </p>
+                <p>
+                    I learned the importance of changing plans after feedback and changing systems to improve the gaming experience even
+                    if that means that part of my work never gets used. The original idea of the game was more stealth intensive but
+                    after some feedback we went for a more arcade, fast past gameplay. Because of the change I think the game became way
+                    more fun to play and a better product because of it. Listening to feedback and adapting the game when things are not
+                    working or feels good is super important and can impact the perception of the end product heavily.
+                </p>
+                <p>
+                    I learned how to manage stress when there is a lot of work but not a lot of time, being able to work in dose
+                    conditions and still being able to plan on how to divide my time so things get done in time. Focusing on the most
+                    important features and not wasting time on things that were nice to have but not important for the game.
                 </p>
             </div>
         </div>
