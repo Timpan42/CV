@@ -30,7 +30,7 @@ cardItem:
             <h1 class="center">{{ title }} </h1>
             <h3 class="center">Chase and Run | Third-person </h3>
             <p>
-
+                Play as a mischievous raccoon stealing items while trying not to get caught.
             </p>
             <p>
                 Itch.io page: <a href="{{cardItem.projectUrl}}">{{cardItem.projectUrl}}</a>
@@ -44,7 +44,10 @@ cardItem:
             <div class="project-about-content project-text-padding">
                 <h3>Summary</h3>
                 <p>
-
+                    Raccoon Rascol is a third-person chase and run game, where I worked on Gameplay, System and UI programming. I go
+                    into more detail on how the spawning system works and in game UI. I learned from this project how to work in a team
+                    in Unity, got better at communication in a team, learning how to manage stress when working and changing plans when
+                    getting feedback.
                 </p>
             </div>
 
@@ -69,32 +72,876 @@ cardItem:
         </div>
         <div class="wrapper">
             <div class="project-content-background project-text-padding">
-
+        
                 <h3>Introduction</h3>
                 <p>
-
+                    Raccoon Rascol is a third-person chase and run game where you play as a mischievous raccoon stealing items
+                    while
+                    trying not to get caught. When items are brought back to the raccoons stash, the player gets buffs,
+                    increasing
+                    movement speed and jump power. There are also power ups scattered around the map increasing the movement
+                    speed and
+                    jump power.
                 </p>
+                <p>
+                    I worked on gameplay mechanics for example power ups and stash buffs. I also worked on systems like, item
+                    and power
+                    up spawners, shop system and money system. I did most of the in game Ui implementation and programming,
+                    connecting
+                    gameplay with the Ui.
+                </p>
+            </div>
+        </div>
+        
+        <div class="wrapper">
+            <div class="project-content-background project-text-padding">
+                <h3>Spawners</h3>
+                <div class="project-side-by-side">
+                    <div>
+                        <p>
+                            The game uses spawners for items and powerups that the player can collect, items gradually
+                            populating the level over
+                            time.
+                        </p>
+                        <p>
+                            Items and powerups spawn location is predetermined by using gameobjects that only hold a transform,
+                            using them
+                            as points for the spawning system.
+                        </p>
+                        <p>
+                            When an Item or powerup has populated a location others can't spawn on the same
+                            point until it has gotten removed, this makes it so there are two things on the same spawn point.
+                        </p>
+                    </div>
+                    <img class="center project-single-img" src="/images/{{ cardItem.imageFileRoute }}/item.webp" alt="">
+                </div>
+        
+                <div class="project-side-by-side" data-layout="column-reverse">
+                    <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/item-and-buff-compresst.webp"
+                        alt="">
+                    <p>
+                        Power ups use an arrow and differences in color to make it easier to see what kind of power up it is. A
+                        yellow arrow
+                        pointing up is a jump buff and a green arrow pointing forward is a speed buff. These buffs last a couple
+                        of seconds.
+                    </p>
+                </div>
+                <div class="project-side-by-side">
+                    <div>
+                        <p>
+                            Items have different colored outlines both in game and when in the inventory, to showcase different
+                            rarities, rarer
+                            items being worth more than more common ones.
+                        </p>
+                    </div>
+                    <img class="center project-single-img"
+                        src="/images/{{ cardItem.imageFileRoute }}/item-diffrent-color-compresst.webp" alt="">
+                </div>
+                
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('spawner_code')">
+                        <h4>
+                        Spawner Code
+                        </h4>
+                        <img src="/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="spawner_code">
+                        {% highlight "csharp" %}
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Properties;
+using UnityEngine;
+using UnityEngine.Video;
+
+//Base Spawner
+
+public class Spawner : MonoBehaviour
+{
+    public struct SpawnPoint
+    {
+        public Transform point;
+        public bool isNotPlaceable;
+    }
+    [SerializeField] protected Transform spawnHolder;
+    [SerializeField] protected List<Transform> initialSpawnPoints = new();
+
+    [Header("Only use one rarity in the spawn list, or it may break!!!")]
+    [SerializeField] protected List<GameObject> initialSpawnList = new();
+
+    protected Dictionary<GameObject, Transform> spawnedItem = new();
+    protected List<SpawnPoint> spawnPointList = new();
+
+    [SerializeField] protected int maxAmountOfItems = 1;
+    protected int itemsInScene = 0;
+
+    [SerializeField] protected float amountToSpawnPerTick = 1;
+    [SerializeField] protected float spawnTime = 5;
+    protected float timer = 0;
+    protected bool canSpawn = false;
+
+    public bool IsSpawnerActive = false;
+
+    public LootData.Rarity RarityLabel;
+
+    private void Start()
+    {
+        if (initialSpawnPoints.Count == 0)
+        {
+            Debug.LogError(gameObject.name + ": Have no spawn points");
+        }
+        if (initialSpawnList.Count == 0)
+        {
+            Debug.LogError(gameObject.name + ": Have no item to spawn");
+        }
+
+        foreach (Transform item in initialSpawnPoints)
+        {
+            SpawnPoint tempSpawnPoint = new SpawnPoint();
+            tempSpawnPoint.point = item;
+            tempSpawnPoint.isNotPlaceable = false;
+            spawnPointList.Add(tempSpawnPoint);
+        }
+    }
+
+    protected void SpawnTimer()
+    {
+        if (timer > 0)
+        {
+            timer -= Time.deltaTime;
+        }
+        else
+        {
+            canSpawn = true;
+        }
+    }
+
+    protected virtual void Spawn()
+    {
+
+    }
+
+    protected virtual void SpawnItem(int index)
+    {
+
+        SpawnPoint tempSpawnPoint = spawnPointList[index];
+        tempSpawnPoint.isNotPlaceable = true;
+        GameObject tempObject = initialSpawnList[Random.Range(0, initialSpawnList.Count)];
+        GameObject currentObject = Instantiate(tempObject, tempSpawnPoint.point.position, tempObject.transform.rotation, spawnHolder);
+        itemsInScene++;
+        spawnedItem.Add(currentObject, tempSpawnPoint.point);
+        spawnPointList[index] = tempSpawnPoint;
+    }
+
+    public virtual bool RemoveItem(GameObject item)
+    {
+        if (!spawnedItem.ContainsKey(item))
+        {
+            return false;
+        }
+        SpawnPoint temp = new();
+        int index = 0;
+        foreach (SpawnPoint spawnPoint in spawnPointList)
+        {
+            if (spawnPoint.point == spawnedItem[item])
+            {
+                temp = spawnPoint;
+                temp.isNotPlaceable = false;
+                index = spawnPointList.IndexOf(spawnPoint);
+            }
+        }
+        spawnPointList[index] = temp;
+
+        itemsInScene--;
+        spawnedItem.Remove(item);
+        Destroy(item);
+        return true;
+
+    }
+
+}
+
+//Random Spawner
+
+public class RandomSpawner : Spawner
+{
+    private void Update()
+    {
+        if (IsSpawnerActive && itemsInScene < maxAmountOfItems)
+        {
+            if (canSpawn)
+            {
+                Spawn();
+                canSpawn = false;
+                timer = spawnTime;
+            }
+            else
+            {
+                SpawnTimer();
+            }
+        }
+    }
+
+    protected override void Spawn()
+    {
+        int randomIndex = 0;
+        for (int i = 0; i < amountToSpawnPerTick; i++)
+        {
+            bool runningRandomizer = true;
+            int failedAttempt = 0;
+            while (runningRandomizer)
+            {
+                if (Randomizer(ref randomIndex))
+                {
+                    SpawnItem(randomIndex);
+                    runningRandomizer = false;
+                }
+                else
+                {
+                    failedAttempt++;
+                    if (failedAttempt >= 10)
+                    {
+                        Debug.Log("failed to many times, break loop");
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private bool Randomizer(ref int randomIndex)
+    {
+        randomIndex = Random.Range(0, spawnPointList.Count);
+        return (!spawnPointList[randomIndex].isNotPlaceable);
+    }
+}
+						{% endhighlight %}
+                    </div>
+                </div>
+                        
             </div>
         </div>
 
         <div class="wrapper">
             <div class="project-content-background project-text-padding">
-                <h3>Subject</h3>
-                <p>
-
-                </p>
+                <h3>Gameplay Ui</h3>
                 <div class="project-side-by-side">
                     <div>
                         <p>
+                            The In game UI uses a UI manager that takes and sends C# events when the appropriate gameplay event
+                            occurs. The inventory is updated every time an item gets picked up, adding the item to the inventory
+                            and updating the points counter. When reaching the raccoon stash the item points gets cashed in and
+                            gets added to the money UI.
                         </p>
                     </div>
-                    <img class="center project-single-img" src="/images/{{ cardItem.imageFileRoute }}/" alt="">
+                    <img class="center project-single-img" src="/images/{{ cardItem.imageFileRoute }}/start-compresst.webp"
+                        alt="">
+                </div>
+        
+                <div class="project-side-by-side" data-layout="column-reverse">
+                    <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/fild-bar-compresst.webp" alt="">
+                    <p>
+                        When chasing in the greed slider gets increased, when reaching a certain level of greed a buff gets
+                        added to the raccoon. The item in the inventory Ui reflects the rarity of the item having the same
+                        color.
+                    </p>
+                </div>
+                <div class="project-side-by-side">
+                    <div>
+                        <p>
+                            When finishing a run the money that the player has gathered and gets saved, so it can be used in the
+                            skins menu. The player can purchase skins for the raccoons both for changing the color of the
+                            raccoon and having different hats.
+                        </p>
+                        <p>
+                            When opening the game a save file gets loaded and read, looking if any skins are unlocked, if it is
+                            unlocked it sets a scriptable object that holds data of skins and hats to unlock, making it possible
+                            for the player to use it in game. When buying accessories the system unlocks the scriptable object,
+                            and writes to the save file saying the accessory in question is now unlocked.
+                        </p>
+                    </div>
+                    <img class="center project-single-img" src="/images/{{ cardItem.imageFileRoute }}/skins.webp" alt="">
+                </div>
+                <div class="project-side-by-side" data-layout="column-reverse">
+                    <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/skins-ingame-compresst.webp"
+                        alt="">
+                    <p>
+                        Whatever skin or accessory was selected in the skins menu gets reflected in the in game.
+                    </p>
+                </div>
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('greed_system')">
+                        <h4>
+                        Greed system
+                        </h4>
+                        <img src="/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="greed_system">
+                        {% highlight "csharp" %}
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class GreedSystem : MonoBehaviour
+{
+    public enum ActivityState
+    {
+        SystemOff,
+        SystemOn,
+        GreedPowerUp
+    }
+
+    public enum GreedState
+    {
+        StageOne,
+        StageTwo,
+        StageThree,
+        StageFour,
+        StageFive,
+    }
+
+    public event Action<float> OnGreedLevelUpdate;
+    public event Action<float, float> OnGreedStart;
+
+
+    // move to a ui manger 
+    [SerializeField] private AnimationCurve greedCurve;
+
+    [SerializeField] private float minGreedLevel = 0, maxGreedLevel = 100;
+    private float currentGreedLevel;
+
+    [SerializeField] private float startingCurvePoint;
+    private float currentCurvePoint;
+    [Header("DONT BUT IT ON 0")]
+    [SerializeField] private float curveBalancingValue = 1;
+
+    private ActivityState gameState;
+    [NonSerialized] public GreedState greedState;
+
+    private void Start()
+    {
+        UiManger.Instance.OnAddToGreedLevel += UiManger_UpdateCurvePoint;
+        StartCoroutine(WaitForConnection());
+        currentCurvePoint = startingCurvePoint;
+        gameState = ActivityState.SystemOn;
+        GameManger.Instance.BuffsForGreedState(greedState);
+
+    }
+
+    private IEnumerator WaitForConnection()
+    {
+        yield return null;
+        OnGreedStart?.Invoke(minGreedLevel, maxGreedLevel);
+    }
+
+    private void Update()
+    {
+
+        if (gameState == ActivityState.GreedPowerUp && !PowerUpSystem.Instance.GreedPowerUp.isActive)
+        {
+            gameState = ActivityState.SystemOn;
+        }
+
+        if (gameState == ActivityState.SystemOn)
+        {
+            if (PowerUpSystem.Instance.GreedPowerUp.isActive)
+            {
+                gameState = ActivityState.GreedPowerUp;
+            }
+            ObservingGreedState();
+
+            ManagingGreedLevel();
+            if (currentGreedLevel <= minGreedLevel)
+            {
+            }
+        }
+    }
+
+    private void GameOver()
+    {
+        gameState = ActivityState.SystemOff;
+    }
+
+    private void ObservingGreedState()
+    {
+        GreedState tempGreedState = greedState;
+
+        if (currentGreedLevel >= (maxGreedLevel / 5) * 4)
+        {
+            greedState = GreedState.StageFive;
+        }
+        else if (currentGreedLevel >= (maxGreedLevel / 5) * 3 && currentGreedLevel <= (maxGreedLevel / 5) * 4)
+        {
+            greedState = GreedState.StageFour;
+        }
+        else if (currentGreedLevel >= (maxGreedLevel / 5) * 2 && currentGreedLevel <= (maxGreedLevel / 5) * 3)
+        {
+            greedState = GreedState.StageThree;
+        }
+        else if (currentGreedLevel >= (maxGreedLevel / 5) * 1 && currentGreedLevel <= (maxGreedLevel / 5) * 2)
+        {
+            greedState = GreedState.StageTwo;
+        }
+        else
+        {
+            greedState = GreedState.StageOne;
+        }
+
+        if (greedState != tempGreedState)
+        {
+            GameManger.Instance.BuffsForGreedState(greedState);
+        }
+
+    }
+
+    private void ManagingGreedLevel()
+    {
+        if (currentGreedLevel > 0)
+        {
+            currentGreedLevel -= greedCurve.Evaluate(currentCurvePoint) * Time.deltaTime;
+            OnGreedLevelUpdate?.Invoke(currentGreedLevel);
+        }
+    }
+
+    public void SuppressGreedLevel(float suppressionValue)
+    {
+        if (currentGreedLevel + suppressionValue > maxGreedLevel)
+        {
+            currentGreedLevel = maxGreedLevel;
+        }
+        else
+        {
+            currentGreedLevel += suppressionValue;
+        }
+    }
+    private void UiManger_UpdateCurvePoint(int score)
+    {
+        SuppressGreedLevel(score);
+        currentCurvePoint += score / curveBalancingValue;
+    }
+}
+						{% endhighlight %}
+                    </div>
+                </div>	
+
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('UI_manager')">
+                        <h4>
+                            UI manger
+                        </h4>
+                        <img src="/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="UI_manager">
+                        {% highlight "csharp" %}
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+
+public class UiManger : MonoBehaviour
+{
+    public static UiManger Instance;
+
+    public event Action<int> OnScoreUpdate;
+    public event Action<int> OnAddToGreedLevel;
+
+
+    public event Action<float> OnGreedLevelUpdate;
+    public event Action<float, float> OnGreedStart;
+
+    public event Action<LootData> OnGettingLoot;
+    public event Action<List<LootData>> OnGettingLootToStash;
+
+    public event Action<int> OnUiChange;
+
+    public event Action OnInventoryFull;
+    public event Action OnInventoryClear;
+
+
+    private GreedSystem greedSystem;
+    private ScoreSystem scoreSystem;
+    private ItemsManager itemsManger;
+    private DetectHuman detectHuman;
+    private InventoryUIManager inventoryUIManager;
+
+    [SerializeField] private GameObject gameOverCanvas;
+    [SerializeField] private GameObject mainCanvas;
+    [SerializeField] private GameObject pauseCanvas;
+
+    [SerializeField] private GameObject ToStash;
+    [SerializeField] private GameObject ToStashBecon;
+
+    [SerializeField] private GameOverMenu gameOverMenu;
+
+    private int currentScore;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            DontDestroyOnLoad(gameObject);
+            Instance = this;
+        }
+
+        greedSystem = FindFirstObjectByType<GreedSystem>();
+        scoreSystem = FindFirstObjectByType<ScoreSystem>();
+        itemsManger = FindFirstObjectByType<ItemsManager>();
+        detectHuman = FindFirstObjectByType<DetectHuman>();
+        inventoryUIManager = FindFirstObjectByType<InventoryUIManager>();
+
+        if (greedSystem == null || scoreSystem == null || itemsManger == null)
+        {
+            Debug.LogError("Greed, score or item system is not in the scene");
+        }
+
+        if (gameOverCanvas == null || mainCanvas == null)
+        {
+            Debug.LogError("Dose not have Game over or main canvas");
+        }
+    }
+
+    private void Start()
+    {
+        currentScore = 0;
+
+        GameManger.Instance.OnPauseGame += GameManger_PauseState;
+
+        scoreSystem.OnScoreIncrease += ScoreSystem_ScoreUpdate;
+
+        greedSystem.OnGreedStart += GreedSystem_OnStart;
+        greedSystem.OnGreedLevelUpdate += GreedSystem_GreedUpdate;
+
+        itemsManger.OnStashHasItems += ItemsManger_GivenItems;
+        itemsManger.OnInventoryFull += ItemManager_FullInventory;
+        itemsManger.OnStashHasItems += ItemManager_ClearInventory;
+        itemsManger.OnGettingLoot += ItemManager_GettingLoot;
+        itemsManger.OnMaxInventoryIncreased += ItemManger_ChangeToStash;
+
+        inventoryUIManager.OnUiChanged += InventoryUIManager_ChangedUi;
+
+        detectHuman.HumanDetected += DetectHumanOnHumanDetected;
+
+    }
+
+
+    private void DetectHumanOnHumanDetected()
+    {
+        mainCanvas.SetActive(false);
+        gameOverCanvas.SetActive(true);
+        GameManger.Instance.ChangeState(GameManger.GameState.GameOver);
+        gameOverMenu.SetEndValues(currentScore);
+    }
+
+    private void ScoreSystem_ScoreUpdate(int score)
+    {
+        DataManager.AddMoney(score);
+        currentScore += score;
+        if (currentScore > DataManager.MyPlayerData.HighScore)
+        {
+            DataManager.MyPlayerData.HighScore = currentScore;
+        }
+
+        OnAddToGreedLevel?.Invoke(score);
+        OnScoreUpdate?.Invoke(currentScore);
+
+    }
+
+    private void GreedSystem_OnStart(float minGreed, float maxGreed)
+    {
+        OnGreedStart?.Invoke(minGreed, maxGreed);
+    }
+
+    private void GreedSystem_GreedUpdate(float greedLevel)
+    {
+        OnGreedLevelUpdate?.Invoke(greedLevel);
+    }
+    private void ItemManager_ClearInventory(List<LootData> data)
+    {
+        foreach (LootData item in data)
+        {
+            DataManager.AddLootToData(item);
+        }
+
+        ToStash.SetActive(false);
+        ToStashBecon.SetActive(false);
+        OnInventoryClear?.Invoke();
+    }
+    private void ItemManager_FullInventory()
+    {
+        ToStash.SetActive(true);
+        ToStashBecon.SetActive(true);
+        OnInventoryFull?.Invoke();
+    }
+    private void ItemsManger_GivenItems(List<LootData> loot)
+    {
+        OnGettingLootToStash?.Invoke(loot);
+    }
+    private void ItemManager_GettingLoot(LootData lootData)
+    {
+        OnGettingLoot?.Invoke(lootData);
+    }
+    private void ItemManger_ChangeToStash()
+    {
+        ToStash.SetActive(false);
+        ToStashBecon.SetActive(false);
+    }
+
+    private void InventoryUIManager_ChangedUi(int maxInventory)
+    {
+        OnUiChange?.Invoke(maxInventory);
+    }
+
+    private void GameManger_PauseState(bool state)
+    {
+        mainCanvas.SetActive(!state);
+        pauseCanvas.SetActive(state);
+    }
+
+}
+                        {% endhighlight %}
+                    </div>
+
                 </div>
 
-                <div class="project-side-by-side" data-layout="column-reverse">
-                    <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/" alt="">
-                    <p>
-                    </p>
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('skins_system')">
+                        <h4>
+                        Skins system
+                        </h4>
+                        <img src="/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="skins_system">
+                        {% highlight "csharp" %}
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Net.Http.Headers;
+using TMPro;
+using Unity.Collections;
+using Unity.VisualScripting;
+using Unity.VisualScripting.Dependencies.Sqlite;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+
+public class CustomeChanger : MonoBehaviour
+{
+    [SerializeField] private List<HatUnlock> hats = new();
+    [SerializeField] private List<SkinUnlock> raccoonSkins = new();
+    [SerializeField] private Renderer raccoonRenderer;
+    [SerializeField] private Transform hatHolder;
+    [SerializeField] private GameObject hatBuyUi;
+    [SerializeField] private TextMeshProUGUI hatCostUi;
+    [SerializeField] private GameObject skinBuyUi;
+    [SerializeField] private TextMeshProUGUI skinCostUi;
+    [SerializeField] private TextMeshProUGUI moneyUi;
+    private int hatIndex;
+    private int skinIndex;
+    private int nextScene;
+
+    public void Start()
+    {
+        if (raccoonRenderer == null)
+        {
+            Debug.LogError("No raccoon renderer!!!");
+        }
+        if (hatHolder == null)
+        {
+            Debug.LogError("No hat holder!!!");
+        }
+
+        if (DataManager.MyPlayerData.CurrentHatName == "")
+        {
+            DataManager.MyPlayerData.CurrentHatName = hats[0].name;
+        }
+
+
+        if (DataManager.MyPlayerData.CurrentSkinName == "")
+        {
+            DataManager.MyPlayerData.CurrentSkinName = raccoonSkins[0].name;
+        }
+        UpdateMoneyUi();
+        HatStart();
+        SkinStart();
+    }
+
+    private void UpdateMoneyUi()
+    {
+        moneyUi.text = "$ " + DataManager.MyPlayerData.CurrentMoney;
+    }
+
+    private void HatStart()
+    {
+
+        for (int i = 0; i < hats.Count; i++)
+        {
+            if (hats[i].name == DataManager.MyPlayerData.CurrentHatName)
+            {
+                hatIndex = i;
+                break;
+            }
+        }
+
+        Debug.Log(DataManager.MyPlayerData.CurrentHatName);
+        Debug.Log(hats[hatIndex].name);
+
+        if (hatHolder.childCount == 0)
+        {
+            Instantiate(hats[hatIndex].HatPrefab, hatHolder);
+        }
+        else
+        {
+            Destroy(hatHolder.GetChild(0).gameObject);
+            Instantiate(hats[hatIndex].HatPrefab, hatHolder);
+        }
+    }
+
+    private void SkinStart()
+    {
+        for (int i = 0; i < raccoonSkins.Count; i++)
+        {
+            if (raccoonSkins[i].name == DataManager.MyPlayerData.CurrentSkinName)
+            {
+                skinIndex = i;
+                break;
+            }
+        }
+
+        Debug.Log(DataManager.MyPlayerData.CurrentSkinName);
+        Debug.Log(raccoonSkins[skinIndex].name);
+
+        raccoonRenderer.material = raccoonSkins[skinIndex].RaccoonMaterial;
+    }
+
+    private void IsItemUnlocked(bool isUnlocked, int itemCost, ref GameObject buyButton, ref TextMeshProUGUI moneyText)
+    {
+        if (isUnlocked)
+        {
+            buyButton.SetActive(false);
+            moneyText.gameObject.SetActive(false);
+        }
+        else
+        {
+            buyButton.SetActive(true);
+            moneyText.gameObject.SetActive(true);
+            moneyText.text = "Cost: " + itemCost;
+        }
+    }
+
+    public void HatChange(int direction)
+    {
+        hatIndex += direction;
+
+        if (hatIndex >= hats.Count)
+        {
+            hatIndex = 0;
+        }
+        else if (hatIndex < 0)
+        {
+            hatIndex = hats.Count - 1;
+        }
+
+        IsItemUnlocked(DataManager.IsHatUnlocked(hats[hatIndex]), hats[hatIndex].Cost, ref hatBuyUi, ref hatCostUi);
+
+        if (hatHolder.childCount == 0)
+        {
+            Instantiate(hats[hatIndex].HatPrefab, hatHolder);
+        }
+        else
+        {
+            Destroy(hatHolder.GetChild(0).gameObject);
+            Instantiate(hats[hatIndex].HatPrefab, hatHolder);
+        }
+    }
+
+    public void SkinChange(int direction)
+    {
+        skinIndex += direction;
+
+        if (skinIndex >= raccoonSkins.Count)
+        {
+            skinIndex = 0;
+        }
+        else if (skinIndex < 0)
+        {
+            skinIndex = raccoonSkins.Count - 1;
+        }
+
+        IsItemUnlocked(DataManager.IsSkinUnlocked(raccoonSkins[skinIndex]), raccoonSkins[skinIndex].Cost, ref skinBuyUi, ref skinCostUi);
+        raccoonRenderer.material = raccoonSkins[skinIndex].RaccoonMaterial;
+    }
+
+    public void BuyHat()
+    {
+        if (DataManager.MyPlayerData.CurrentMoney >= hats[hatIndex].Cost)
+        {
+            DataManager.ChangeHatsUnlocked(hats[hatIndex], true);
+            IsItemUnlocked(DataManager.IsHatUnlocked(hats[hatIndex]), hats[hatIndex].Cost, ref hatBuyUi, ref hatCostUi);
+            DataManager.RemoveMoney(hats[hatIndex].Cost);
+            UpdateMoneyUi();
+        }
+    }
+
+    public void BuySkin()
+    {
+        if (DataManager.MyPlayerData.CurrentMoney >= raccoonSkins[skinIndex].Cost)
+        {
+            DataManager.ChangeSkinsUnlocked(raccoonSkins[skinIndex], true);
+            IsItemUnlocked(DataManager.IsSkinUnlocked(raccoonSkins[skinIndex]), raccoonSkins[skinIndex].Cost, ref skinBuyUi, ref skinCostUi);
+            DataManager.RemoveMoney(raccoonSkins[skinIndex].Cost);
+            UpdateMoneyUi();
+        }
+    }
+
+    public void SaveChanges()
+    {
+        if (DataManager.IsHatUnlocked(hats[hatIndex]))
+        {
+            DataManager.CurrentHat = hats[hatIndex];
+            DataManager.MyPlayerData.CurrentHatName = hats[hatIndex].name;
+        }
+
+        if (DataManager.IsSkinUnlocked(raccoonSkins[skinIndex]))
+        {
+            DataManager.CurrentSkin = raccoonSkins[skinIndex];
+            DataManager.MyPlayerData.CurrentSkinName = raccoonSkins[skinIndex].name;
+        }
+        SaveSystem.SavePlayerData();
+    }
+
+    private void ChangingScene(int sceneIndex)
+    {
+        nextScene = sceneIndex;
+        SaveSystem.IsSaved = false;
+        SaveChanges();
+        StartCoroutine(WaitForSaveData());
+    }
+
+    private IEnumerator WaitForSaveData()
+    {
+        while (!SaveSystem.IsSaved)
+        {
+            yield return null;
+        }
+        SceneManager.LoadScene(nextScene);
+    }
+
+    public void SceneLoad()
+    {
+        ChangingScene(1);
+    }
+
+    public void Back()
+    {
+        ChangingScene(0);
+    }
+}
+						{% endhighlight %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,7 +950,28 @@ cardItem:
             <div class="project-content-background project-text-padding">
                 <h3>What I learned </h3>
                 <p>
-
+                    Got better at working in a team inside Unity, keeping a consistent code style and codebase, communicating on what I
+                    am working on to others so we don't work on the same thing at the same time, and using Unity's Perforce integration
+                    to minimise the risk of merge conflicts.
+                </p>
+                <p>
+                    I learned how to use Perforce and Jira as this was the first time using these tools. Perforce took some time to get
+                    used to and work with, but I found the feature of seeing which files other people were working on super useful for.
+                    Jira was easier to grasp being similar to tools like Trello, so I already had some experience working with these
+                    types of tools. I liked the function of ordering things by epics so it was easier to see how far along a feature
+                    was, and what was done inside of it.
+                </p>
+                <p>
+                    I learned the importance of changing plans after feedback and changing systems to improve the gaming experience even
+                    if that means that part of my work never gets used. The original idea of the game was more stealth intensive but
+                    after some feedback we went for a more arcade, fast past gameplay. Because of the change I think the game became way
+                    more fun to play and a better product because of it. Listening to feedback and adapting the game when things are not
+                    working or feels good is super important and can impact the perception of the end product heavily.
+                </p>
+                <p>
+                    I learned how to manage stress when there is a lot of work but not a lot of time, being able to work in dose
+                    conditions and still being able to plan on how to divide my time so things get done in time. Focusing on the most
+                    important features and not wasting time on things that were nice to have but not important for the game.
                 </p>
             </div>
         </div>

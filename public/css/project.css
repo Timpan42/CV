@@ -17,8 +17,8 @@
 .project-top-content img {
     align-items: center;
     width: 100%;
-    height: min(22rem, 100vw - var(--space-xl));
-    object-fit: cover;
+    height: min(25rem, 100vw - var(--space-xl));
+    object-fit: contain;
 }
 
 .project-about {
