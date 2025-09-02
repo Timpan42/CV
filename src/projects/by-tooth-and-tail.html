@@ -36,7 +36,7 @@ cardItem:
                 Itch.io page: <a href="{{cardItem.projectUrl}}">{{cardItem.projectUrl}}</a>
             </p>
         </div>
-        <img src="/images/{{ cardItem.imageFileRoute }}/rat_poster-compresst2.webp" alt="">
+        <img src="/images/{{ cardItem.imageFileRoute }}/rat_poster-compresst.webp" alt="">
     </section>  
 
     <section class="container flow">
@@ -44,7 +44,9 @@ cardItem:
             <div class="project-about-content project-text-padding">
                 <h3>Summary</h3>
                 <p>
-
+                    By Tooth & Tail is a 3D top down, grid-based stealth game, where I worked on gameplay and system programming. I did
+                    the mobile port of the, making sure it had the same playability as the PC version. I learned from friction in the
+                    team, keeping communication going in the team and got better at estimating time for features.
                 </p>
             </div>
 
@@ -86,23 +88,264 @@ cardItem:
 
         <div class="wrapper">
             <div class="project-content-background project-text-padding">
-                <h3>Subject</h3>
+                <h3>Turn based system</h3>
                 <p>
-
+                    Every time the player makes an action input is counted as a turn, action inputs are; moving to a tile and
+                    interacting with a distractible object.
+                    When the player has made its move it comes to the enemies turn. After all enemies had done its action the system
+                    repeats itself and it becomes the player's turn again.
                 </p>
-                <div class="project-side-by-side">
-                    <div>
-                        <p>
-                        </p>
+
+                <p>
+                    Some struggles I had when making this system was because of a bug, making it possible to move twice in one turn when
+                    the player should only be able to move ones in a turn. The cause of the bug was most likely caused by the way we
+                    handled inputs. When we received an input we took its value it held and then broadcast that value using an event.
+                    Because of this set up, the player could spam inputs broadcasting multiple inputs before the turn system could
+                    switch to the enemies turn. The solution was adding an execution phase that gets activated after the enemies had
+                    decided their turn.
+                </p>
+               
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('turn_manager')">
+                        <h4>
+                            Turn manager
+                        </h4>
+                        <img src="/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="turn_manager">
+                        {% highlight "csharp" %}
+using System;
+using System.Collections;
+using System.Threading.Tasks;
+using UnityEngine;
+
+public class TurnManager : MonoBehaviour
+{
+    // Todo
+    // Have a delay after all have taken a turn for animations
+
+    public enum Turn
+    {
+        Player,
+        Enemy,
+        ExecuteActions
+    }
+
+    public static TurnManager Instance; //TODO : create foundation  master 
+    public event Action OnPlayerAction; //TODO :  we can use Basic signal injection 
+    public event Action OnAllEnemiesActed;
+    public event Action OnExecutedActions;
+    [NonSerialized] public Turn currentTurn;
+
+    [Tooltip("If the the player makes a move while a action is happening the games moves forward, skipping animations")]
+    [SerializeField] private int m_delayInMillisecond = 200;
+
+    private bool m_isWorking;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(Instance);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    private async void ExecuteActionsDelay()
+    {
+        OnExecutedActions?.Invoke();
+        await Task.Delay(m_delayInMillisecond);
+        if(!m_isWorking)
+            StartCoroutine(WaitForSwitch());
+    }
+    public void ClearTurnState()
+    {
+        Debug.Log("[TurnManager] Clearing turn state...");
+        currentTurn = Turn.Player;
+
+        OnPlayerAction = null;
+        OnAllEnemiesActed = null;
+        OnExecutedActions = null;
+
+        StopAllCoroutines(); 
+        CancelInvoke(); 
+    }
+
+
+
+    public void PlayerAction()
+    {
+        if (GameManger.Instance.CurrentGameState == GameManger.GameState.GameRunning)
+        {
+            if (currentTurn != Turn.Player) return;
+
+            currentTurn = Turn.Enemy;
+            OnPlayerAction?.Invoke();
+
+            EnemiesActed();
+        }
+    }
+
+
+
+    public void EnemiesActed()
+    {
+        currentTurn = Turn.ExecuteActions;
+        OnAllEnemiesActed?.Invoke();
+        ExecuteActionsDelay();
+    }
+
+    private IEnumerator WaitForSwitch()
+    {
+        m_isWorking = true;
+        yield return new WaitForSeconds((0.3f * EnemyTracker.Instance.CurrentMovesPerTurn()) + (EnemyTracker.Instance.CurrentMovesPerTurn() * 0.1f));
+        currentTurn = Turn.Player;
+        m_isWorking = false;
+    }
+}
+                        {% endhighlight %}
                     </div>
-                    <img class="center project-single-img" src="/images/{{ cardItem.imageFileRoute }}/" alt="">
                 </div>
 
-                <div class="project-side-by-side" data-layout="column-reverse">
-                    <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/" alt="">
-                    <p>
-                    </p>
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('player')">
+                        <h4>
+                            Player turn manager
+                        </h4>
+                        <img src="/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="player">
+                        {% highlight "csharp" %}
+using System;
+using UnityEngine;
+
+public class PlayerTakeTurn : MonoBehaviour
+{
+    // Modify with more action types if needed
+    public enum PlayerAction
+    {
+        NotSet,
+        Move,
+        Interact,
+        Skip
+    }
+
+    [NonSerialized] public PlayerAction CurrentAction;
+    private PlayerMovement m_playerMovement;
+    private PlayerInteract m_playerInteract;
+
+
+
+    private void Start()
+    {
+        m_playerMovement = GetComponent<PlayerMovement>(); //TODO : Use serialize 
+        m_playerInteract = GetComponent<PlayerInteract>();
+
+        TurnManager.Instance.OnExecutedActions += ExecuteAction;
+    }
+
+    public void PlayerTakeAction(PlayerAction action)
+    {
+        CurrentAction = action;
+        TurnManager.Instance.PlayerAction();
+    }
+
+    public bool IsPlayersTurn()
+    {
+        return TurnManager.Instance.currentTurn == TurnManager.Turn.Player;
+    }
+    public void ClearActions()
+    {
+        CurrentAction = PlayerAction.NotSet; 
+    }
+    private void SkipTurn()
+    {
+        Debug.Log("Skip Turn");
+    }
+
+    // Put whatever function you need to make things work 
+    private void ExecuteAction()
+    {
+        switch (CurrentAction)
+        {
+            case PlayerAction.NotSet:
+                break;
+            case PlayerAction.Move:
+                m_playerMovement.ExecuteAction();
+                break;
+            case PlayerAction.Interact:
+                m_playerInteract.ExecuteAction();
+                break;
+            case PlayerAction.Skip:
+                SkipTurn();
+                break;
+        }
+        CurrentAction = PlayerAction.NotSet;
+    }
+}
+                        {% endhighlight %}
+                    </div>
                 </div>
+
+                <div class="">
+                    <button class="project-button" onclick="ToggleContent('enemy')">
+                        <h4>
+                            Enemy turn manager
+                        </h4>
+                        <img src="/images/main/chevron-vit-rotate.png" alt="">
+                    </button>
+                    <div id="enemy">
+                        {% highlight "csharp" %}
+using UnityEngine;
+
+public class EnemyTakeTurn : MonoBehaviour
+{
+    // Modify with more action types if needed
+    public enum EnemyAction
+    {
+        NotSet,
+        Move,
+        Interact,
+        Skip
+    }
+
+    private EnemyManager m_enemyManger;
+
+    private void Start()
+    {
+        m_enemyManger = GetComponent<EnemyManager>();
+
+        TurnManager.Instance.OnPlayerAction += EnemiesTurn;
+        TurnManager.Instance.OnExecutedActions += ExecuteActions;
+    }
+
+    private void EnemiesTurn()
+    {
+        m_enemyManger.EnemiesTurn();
+    }
+
+    private void ExecuteActions()
+    {
+        m_enemyManger.ExecuteActions();
+    }
+
+    public void EnemiesTookAction()
+    {
+        TurnManager.Instance.EnemiesActed();
+    }
+
+    public bool IsEnemiesTurn()
+    {
+        return TurnManager.Instance.currentTurn == TurnManager.Turn.Enemy;
+    }
+}
+                        {% endhighlight %}
+                    </div>
+                </div>
+
             </div>
         </div>
 
