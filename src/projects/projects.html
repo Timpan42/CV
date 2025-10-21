@@ -1,3 +1,6 @@
+---
+title: "Projects"
+---
 {% extends "layouts/base.html" %}
 
 {% block css %}
@@ -10,34 +13,17 @@
 
 {% block content %}
 
-{# START Hero #}
-<article class="hero section">
-	<div class="hero-content hero-wrapper container flow big-section">
-		<div class="flow section">
-			<h1>Tim Fagerdal </h1>
-			<h2>Gameplay Programmer</h2>
-			<p>I like to work mainly on gameplay, but I enjoy dabbling in a little bit of everything</p>
-		</div>
-		<img src="/images/main/trädd.png" alt="">
-	</div>
-</article>
-{# END Hero #}
-
 {# START Cards #}
 <article class="big-section">
 	<div class="container" id="project">
-		<h2 class="center">Projects</h2>
+		<h2 class="center">Project History</h2>
 		<ul class="features grid" role="list" data-rows="masonry">
 
 			{%- for card in collections.card | reverse -%}
-			{% if card.data.cardItem.mainPage %}
-
 			<li class="list-container flow">
 				{% set cardItemContent = card.data.cardItem %}
 				{% include "partials/card.html" %}
 			</li>
-
-			{% endif %}
 
 			{%- endfor -%}
 
@@ -46,11 +32,5 @@
 </article>
 {# END Cards #}
 
-
-{# START Education #}
-
-{% include "partials/edu.html" %}
-
-{# END Education#}
 
 {% endblock %}
