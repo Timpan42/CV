@@ -8,7 +8,7 @@ date: "2025-05-01"
 cardItem: 
     mainPage: true
     title: In Bloom
-    startDate: "2025/05"
+    startDate: "2025/5"
     endDate: "2025/6"
     role: AI/Combat/UI programming
     peopleAmount: 18
@@ -24,7 +24,8 @@ cardItem:
     projectUrl: https://futuregames.itch.io/in-bloom
     imageFileRoute: project_img/in-bloom 
     imageUrl: /in-bloom-edit.webp 
-    imageProjectUrl: /in-bloom.webp
+    topProjectUrl: videos/In-Bloom-Trailer_1080p.mp4
+    topProjectUrlOrigin: https://www.youtube.com/watch?v=qm8phg69Ut4
 ---
 
 <article class="big-section">
@@ -35,7 +36,10 @@ cardItem:
             <p>A first person horror survival game in a post-apocalyptic world where nature has taken over.</p>
             <p>Itch.io page: <a href="{{cardItem.projectUrl}}">{{cardItem.projectUrl}}</a></p>
         </div>
-        <img src="/images/{{ cardItem.imageFileRoute }}{{ cardItem.imageProjectUrl }}" alt="">
+        <video controls alt="">
+            <source src="/{{ cardItem.topProjectUrl }}" type="video/mp4">
+            {{ cardItem.topProjectUrlOrigin }}
+        </video>    
     </section>
 
     <section class="container flow">

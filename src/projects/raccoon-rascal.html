@@ -17,11 +17,12 @@ cardItem:
     otherTools: Perforce, Miro, Jira
     summaryOne: First game project at FutureGames, play as a raccoon trying to steal items, while not trying to get captured.
     summaryTwo: Worked on pick-ups, save system, buffs system, and store system.
-    url: projects/raccoon-rascal/
+    url: /projects/raccoon-rascal/
     projectUrl: https://futuregames.itch.io/raccoonrascal
     imageFileRoute: project_img/raccoon-rascal
     imageUrl: /Raccon_Rascal.webp
-    imageProjectUrl: /Raccon_Rascal.webp
+    topProjectUrl: videos/Raccoon-Rascal-Trailer_1080p.mp4
+    topProjectUrlOrigin: https://www.youtube.com/watch?v=k8EJK-X4Qgo
 ---
 
 
@@ -37,7 +38,10 @@ cardItem:
                 Itch.io page: <a href="{{cardItem.projectUrl}}">{{cardItem.projectUrl}}</a>
             </p>
         </div>
-        <img src="/images/{{ cardItem.imageFileRoute }}{{ cardItem.imageProjectUrl }}" alt="">
+        <video controls alt="">
+            <source src="/{{ cardItem.topProjectUrl }}" type="video/mp4">
+            {{ cardItem.topProjectUrlOrigin }}
+        </video>
     </section>
 
     <section class="container flow">

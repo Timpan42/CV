@@ -21,7 +21,8 @@ cardItem:
     projectUrl: https://futuregames.itch.io/by-tooth-and-tail
     imageFileRoute: project_img/by-tooth-and-tail 
     imageUrl: /Tooth_and_Tail_Gimp.png
-    imageProjectUrl: /Tooth_and_Tail.webp
+    topProjectUrl: videos/Tooth-and-Tail-Trailer_1080p.mp4
+    topProjectUrlOrigin: https://www.youtube.com/watch?v=YMghuYncv8A
 ---
 
 
@@ -37,7 +38,10 @@ cardItem:
                 Itch.io page: <a href="{{cardItem.projectUrl}}">{{cardItem.projectUrl}}</a>
             </p>
         </div>
-        <img src="/images/{{ cardItem.imageFileRoute }}/rat_poster-compresst.webp" alt="">
+        <video controls alt="">
+            <source src="/{{ cardItem.topProjectUrl }}" type="video/mp4">
+            {{ cardItem.topProjectUrlOrigin }}
+        </video>
     </section>  
 
     <section class="container flow">
