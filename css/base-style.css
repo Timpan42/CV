@@ -176,3 +176,35 @@
     flex-grow: 1;
     flex-basis: 350px;
 }
+
+.more-projects {
+    padding-top: var(--space-3xl);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    a {
+        display: flex;
+        align-items: center;
+        color: var(--color-light-text);
+        font-size: var(--step-1);
+    }
+
+    button
+    {
+        padding: 1.5rem 1rem 1.5rem 2rem;
+    }
+
+    img {
+        height: min(4rem, 15vw - var(--space-2xs));
+        width: min(4rem, 15vw - var(--space-2xs));
+        object-fit: cover;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .more-projects {
+        padding-top: var(--space-l);
+
+    }
+}
