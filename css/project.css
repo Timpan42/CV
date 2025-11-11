@@ -56,6 +56,10 @@
     gap: var(--space-s-m);
     padding: 2rem 0px;
 
+    h4{
+        margin-top: 0;
+    }
+
     img {
         width: 50%;
         height: 100%;
@@ -132,6 +136,10 @@
         flex-direction: column;
         gap: 0;
         padding: 0px;
+
+        h4{
+            margin-top: 1.67rem;
+        }
 
         img {
             width: 100%;

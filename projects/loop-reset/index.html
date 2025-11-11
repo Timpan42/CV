@@ -178,10 +178,9 @@
     <section class="container project-top-content section">
         <div>
             <h1 class="center">Loop Reset </h1>
-            <h1 class="center">Project under construction </h1>
             <h3 class="center">Arcade | Twin Stick Shooter | Sci-Fi</h3>
             <p>
-
+                A twin stick shooter with arcade feeling, procedural level generation, and upgradable weapons.
             </p>
             <p>
                 Itch.io page: <a href="https://futuregames.itch.io/loopreset">https://futuregames.itch.io/loopreset</a>
@@ -198,6 +197,10 @@
             <div class="project-about-content project-text-padding">
                 <h3>Summary</h3>
                 <p>
+                    Loop reset is a roguelike twin-stick shooter with an arcade feel and a sci-fi theme. I primarily worked on the level
+                    generator, working with the level designer to have cohesive, playable levels. Other responsibilities were game saving,
+                    performance handling, game setup sequences, and making builds of the game. After the problems faced because of technical
+                    debt, I learned the importance of planning code bases that will be used and how systems would need to scale.
                 </p>
             </div>
 
@@ -213,7 +216,7 @@
                     <b>Engine:</b> Unreal 5
                 </p>
                 <p>
-                    <b>Roles:</b> Gameplay/System programmer
+                    <b>Roles:</b> System programmer
                 </p>
                 <p>
                     <b>Other Tools:</b> Perforce, Miro, Jira
@@ -222,8 +225,43 @@
         </div>
         <div class="wrapper">
             <div class="project-content-background project-text-padding">
-
                 <h3>Introduction</h3>
+                <p>
+                    Loop reset is a rogue-like, twin stick shooter where the player needs to survive a horde of aliens and
+                    continually
+                    move forward through procedurally generated levels. By using weapons, gadgets, and elemental effects, the
+                    player
+                    defeats enemies who are constantly getting stronger. Levels can have special objectives that impose
+                    challenges that
+                    need to be conquered before moving forward.
+                </p>
+                <p>
+                    On this project, my prime responsibilities were level generation - working closely with the project's level
+                    designers to make levels feel natural and have a good gameplay flow, both having intense sections and calmer
+                    sections.
+                </p>
+                <p>
+                    Other responsibilities I had were: Game saving - handling save data that is being used between levels, for
+                    example,
+                    weapon upgrades, player current stats, etc. This also included saving to files and handling high scores.
+                </p>
+                <p>
+                    Performance handler - making sure that the performance of the game is good and doesn't go lower than an
+                    acceptable
+                    level, fixing areas where performance is noticeably worse than others. Changing Unreal settings to exclude
+                    features
+                    that were not needed or used.
+                </p>
+                <p>
+                    Game setup sequence - controlling how the game loads its level, making sure systems are done initialising
+                    before
+                    moving to the main gameplay level. This is to prevent game-breaking bugs, for example, levels not being
+                    loaded,
+                    making it impossible to progress.
+                </p>
+                <p>
+                    Making builds - I was in charge of making builds and making sure that they worked as intended.
+                </p>
             </div>
         </div>
 
@@ -232,12 +270,43 @@
             <div class="project-content-background project-text-padding">
                 <h3>Level Generation</h3>
                 <p>
-
+                    In Loop Reset, we have procedural level generation, which uses rooms that have level instances attached to them
+                    that
+                    get placed in the world one after another, in the end creating a level. Rooms have different sizes and different
+                    purposes. For example, a combat room is usually bigger and holds a lot more enemies and is designed to be more
+                    intense, while a corridor room is smaller in size and is designed to be calmer. I worked closely with level
+                    designers, mapping out how rooms would be placed and what a whole level would look like.
+                    The flow of levels was important to consider when building the level generator, having sections with high
+                    intensity
+                    but also areas that are calmer just after an intense moment.
+                    We worked back and forth, having a lot of conversations about what was wanted from the level generator and what
+                    was
+                    needed. Throughout the project, I controlled the production flow for rooms, keeping track of what type of rooms
+                    were
+                    needed and setting deadlines for them. This was so that rooms were done in a reasonable time, and also so rooms
+                    were
+                    not over-scoped and would work with the level generator.
                 </p>
+            
+                <div class="section">
+                    <h4>
+                        What is a room
+                    </h4>
+                
+                    <p>
+                        A Room is an Actor that holds the size of the room in the form of a collider, and the direction of it, including
+                        an entering point and exit points. All meshes and any special mechanics that are connected to a room are kept in
+                        a level instance that gets loaded in when the level generator can confirm that it has finished making a level.
+                    </p>
+                </div>
+            
                 <div class="project-side-by-side">
                     <div>
-                        <h4><br>Pre spawning<br></h4>
+                        <h4>Before spawning</h4>
                         <p>
+                            How the level generator works is first choosing which order rooms will spawn in, with some weighted randomness, a room
+                            type gets chosen - a room type being an Enum class. The chosen room type gets placed in an array that's going to be used
+                            later for spawning room Actors. The weighted randomness gives control over level flow when generating.
                         </p>
                     </div>
                     <iframe src="https://blueprintue.com/render/bxb63b1c/" scrolling="no" allowfullscreen=""></iframe>
@@ -248,16 +317,34 @@
                         <iframe src="https://blueprintue.com/render/o5366gmv/" scrolling="no" allowfullscreen=""></iframe>
                     </div>
                     <div>
-                        <h4><br>Normal rooms spawning<br></h4>
+                        <h4>Room spawning</h4>
                         <p>
+                            When generating rooms, the generator goes through the room type array that was generated beforehand,
+                            spawning rooms that are correlated to the room type and placing them on the edge of any exit points from the
+                            previous room. When a room spawns, we check if it collides with other rooms to make sure that rooms aren't
+                            overlapping. If the recently spawned room collides with another room, we delete the spawned room and try
+                            again with another room piece. If a room piece is valid, we collect any exit points from the room, they get
+                            used for the next spawning room. The generator continually repeats these actions, going through the room
+                            type array until it's empty.
                         </p>
                     </div>
                 </div>
 
                 <div class="project-side-by-side">
                     <div>
-                        <h4><br>Special rooms spawning<br></h4>
+                        <h4>Special rooms spawning</h4>
                         <p>
+                            Special rooms are single offshoot rooms that can be connected to normal rooms that have exit points to hold them. They
+                            hold different events that are contained and designed to promote exploration. To make sure that special rooms do not
+                            interfere with the normal room spawning, they are done after the normal spawning is complete. Spawning works the same as
+                            the “Room spawning” section, but with the added caveat that if a special room spawns and it collides with another room,
+                            the spawned room gets removed and gets replaced with a wall, closing the possibility of moving that direction.
+                        </p>
+                        <p>
+                            When every room is placed and the map is done generating, without failing, we load all level instances for the rooms and
+                            wait for them to load before completing the level generator. We use level instances to save on loading times, only
+                            loading assets when we have a working level, and to make it easier for the level designer to make levels, not being
+                            restricted by building them in blueprints.
                         </p>
                     </div>
                     
@@ -270,8 +357,23 @@
                     </div>
 
                     <div>
-                        <h4><br>Challenges<br></h4>
+                        <h4>Challenges</h4>
                         <p>
+                            When making the level generator, it was easy to make rooms spawn and check if placements were valid. I struggled with
+                            figuring out how to control the randomisation with the system I had, because the world map isn't built on a grid, and
+                            rooms don't have any standardized measurements. We also wanted the map to be linear, having a clear direction to move
+                            and no big branching paths that the player could walk through. Why we wanted control over how levels were generated was
+                            to get control over the game and level flow, having areas that are intense and calmer areas.
+                        </p>
+                        <p>
+                            The solution to have control over the generation was to have an Enum array of room types, which gets filled by weighted
+                            randomisation. By categorizing room types into two groups: Aggressive rooms - larger rooms with combat, and passive
+                            rooms, and passive rooms - calmer sections where almost no combat happens, I could then track how the level flow would
+                            be. By tracking which group the latest room type belonged to, I could weigh the choice for the level selector. For
+                            example, if the generator had added two passive room types, for the next room it could choose, there were 80% chances
+                            for an aggressive room to spawn, instead of the default 40%. This worked the same if there were multiple aggressive room
+                            types that were spawned, but with different percentile values. This gave more control over the generation, so there were
+                            no long stretches of the level where nothing happened or too much happened.
                         </p>
                     </div>
 
@@ -282,8 +384,28 @@
 
         <div class="wrapper">
             <div class="project-content-background project-text-padding">
-                <h3>What I learned </h3>
-                
+                <h3>What I learned</h3>
+                <p>
+                    In this project, I had a great team and working environment, and we were driven throughout the project. We did have
+                    problems with technical debt; the code base at the beginning of the project was not the best, making it hard to work
+                    with. Debugging and bugfixing were particularly difficult; on many occasions, values that would be used to change stats
+                    didn't work as intended, which made it hard to find and fix problems inside the code base.
+                </p>
+                <p>
+                    Fixing the code base at the beginning of the project would save a lot of time and work for all involved in the project.
+                    Code that worked at the beginning was never really future-proofed or planned to be expanded on, which caused problems
+                    later on when it needed to be expanded. With the short period of the project, we didn’t have time to fix problematic
+                    portions of the code base. If the code didn't have critical problems, it was kept and not changed, which made technical
+                    debt problematic. From this situation, I learned the importance of planning out the code bases before committing to
+                    writing it, and the importance of planning how a system would scale when more features are added.
+                </p>
+                <p>
+                    I also learned the importance of having someone in the team who can set deadlines for content; in this project, it was
+                    partly my role. Because of the limited time of the project, we needed internal deadlines for features and content pieces
+                    to make sure that we had the time to make everything that we wanted to be in the game. With the deadlines, we could plan
+                    better for what was possible with the time we had, making the work experience more enjoyable with less stress through
+                    the project.
+                </p>
             </div>
         </div>
 
