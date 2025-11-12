@@ -192,16 +192,10 @@
             <div class="project-about-content project-text-padding">
                 <h3>Summary</h3>
                 <p>
-                    Primarily worked on AI, combat and UI programming. Used Unreal's behavior tree for the AI, made sure that the enemy
-                    worked with the main combat mechanic, worked with the UI team to implement and connect UI with gameplay.
-                </p>
-                <p>
-                    I go in to more detail on how the AI works, using states to manage behavior.  
-                </p>
-                <p>
-                    Got better
-                    at managing time with a lot of takes and a short deadline, taking ownership of features, and communicating in a
-                    team.
+                    I primarily worked on AI, combat and UI programming. Used Unreal's behavior tree for AI and made sure that the enemy
+                    worked with the main combat mechanic. Also worked with the UI team to implement and connect UI with gameplay. I got
+                    better at managing time with a lot of tasks and a short deadline, taking ownership of features, and communicating in
+                    a team.
                 </p>
             </div>
 
@@ -229,35 +223,30 @@
             <div class="project-content-background project-text-padding">
 
                 <h3>Introduction</h3>
-                <p>My three main working aries were AI and combat programming - anything related to the enemy in the
-                    game
-                    was my
-                    responsibility to program, and UI programming - helping the UI team implement their UI and any
-                    features
-                    that they
-                    needed was my responsibility.
+                <p>
+                    In Bloom is a first person survival horror game, set in a post-apocalyptic world where nature has taken over. The
+                    player needs to explore the world and gather items and survive nature's horrors to traverse levels.The player has a
+                    gun to defend itself with, but little ammo available so fights need to be managed carefully.
                 </p>
-                <p>The AI uses Unreal's behavior tree and states for determining behavior, combining the AI controller
-                    and
-                    task nodes to
-                    execute behavior. We used unreal's third person character as a base for movement, saving time on not
-                    making our own
-                    character controller.
-
-                    For combat I made sure that the enemy worked with the main combat mechanic in the game and that the
-                    enemies were
-                    easily balanceable without modifying code.
-                    For UI I worked together with the UI team making the UI work, setting up connections between what is
-                    happening in the
-                    game with the UI. I worked on the main- and pause menu, making settings and navigation consistent
-                    and
-                    working.
+                <p>
+                    In this project my main working areas were: AI and combat programming - anything related to the enemy in the game
+                    was my responsibility to manage and program. UI programming - helping the UI team implement their UI and any
+                    features that they needed was my responsibility to fix and help with if needed.
                 </p>
-                <p>I spent most of my time programming in blueprints mostly because it was fast to prototype features,
-                    and
-                    so others in
-                    the team had the possibility to edit and understand the code base, especially if they didn't have
-                    experience working
+                <p>
+                    The AI uses Unreal's behavior tree and states to determine behavior, combining AI controllers and task nodes for
+                    execution. We used unreal's third person character as a base for movement, saving time on not making our own
+                    character controller. For combat I made sure that the enemy worked with the main combat mechanic in the game and
+                    that the enemies were easily balanceable without modifying code.
+                </p>
+                <p>
+                    I worked together with the UI team helping them with implementation and programming related features, setting up
+                    connections between what happens in the game with the UI. I worked on the main- and pause menu, making settings and
+                    navigation consistent.
+                </p>
+                <p>
+                    I spent most of my time programming in blueprints mostly because it was fast to prototype features, and so others in
+                    the team had the possibility to edit and understand the code base, especially if they didn't have experience working
                     in C++.
                 </p>
             </div>
@@ -266,22 +255,19 @@
         <div class="wrapper">
             <div class="project-content-background project-text-padding">
                 <h3>AI</h3>
-                <p>The enemy AI uses Unreal's <b>Behavior Tree</b> and <b>AI controller</b> in combination with <b>task
-                        nodes</b> and a <b>Blackboard</b> to
-                    create the enemies behavior. It also has a <b>AI Perception </b> component for seeing and hearing
-                    noises
-                    the
-                    player makes. The AI has
-                    stated It can be in:
+                <p>
+                    The enemy AI uses Unreal's Behavior Tree and AI controller in combination with task nodes and a Blackboard to create
+                    the enemies behavior. It also has an AI Perception component used for seeing and hearing noises the player makes.
+                    The AI has different states It can be in:
                 </p>
                 <div class="project-side-by-side">
                     <div>
                         <p>
-                            Idle; Standing in one place looking around waiting for a new event to execute a different
-                            behavior.
+                            Idle; standing in one place looking around waiting for a new event to execute a different behavior.
+                        
                         </p>
                         <p>
-                            Patrol; Moving around to different locations depending on what patrol pattern is attached.
+                            Patrol; moving around to different locations depending on what patrol pattern is attached.
                         </p>
                     </div>
                     <img class="center project-single-img" src="/CV/images/project_img/in-bloom/patrol-ai-tree.webp" alt="">
@@ -290,17 +276,12 @@
                 <div class="project-side-by-side" data-layout="column-reverse">
                     <img class="project-single-img" src="/CV/images/project_img/in-bloom/alerted-ai-tree.webp" alt="">
                     <p>
-                        Alerted; Moves to the last known location of a sensation trigger.
-                        Chase; Chases the player if the player is in its seeing range, when it's close enough to the
-                        player
-                        it
-                        attacks.
+                        Alerted; moves to the last known location of a sensation trigger.
                     </p>
                 </div>
                 <div class="project-side-by-side">
                     <p>
-                        Chase; Chases the player if the player is in its seeing range, when it's close enough to the
-                        player it attacks.
+                        Chase; Chases the player if the player is in its seeing range, when it's close enough to the player it attacks.
                     </p>
                     <img class="project-single-img" src="/CV/images/project_img/in-bloom/chase-code.webp" alt="">
                 </div>
@@ -308,37 +289,29 @@
                 <div class="project-side-by-side" data-layout="column-reverse">
                     <img class="project-single-img" src="/CV/images/project_img/in-bloom/attack-ai-tree.webp" alt="">
                     <p>
-                        Attack; The enemy attacks doing an attack animation and a collision check to see if it hits,
-                        if
-                        it
-                        does the
-                        player takes damage, if the player moves out of range during the attack nothing happens.
+                        Attack; The enemy attacks doing an attack animation and a collision check to see if it hits, if it does the player
+                        takes damage, if the player moves out of range during the attack nothing happens.
                     </p>
                 </div>
-
                 <p>
-                    The AI is editable per enemy so it can have different behaviors making it possible to have different
-                    scenarios and
+                    The AI is editable per enemy so it can have different behaviors making it possible to have different scenarios and
                     challenges for the player. There are four patrol behaviors:
                 </p>
                 <p>
-                    No Patrolling; The Ai doesn't move from its spawn position.
+                    No Patrolling; the Ai doesn't move from its spawn position.
                 </p>
                 <p>
-                    Patrol points in order; Follows a fixed route based on patrol points.
+                    Patrol points in order; follows a fixed route based on patrol points.
                 </p>
                 <p>
-                    Patrol points random; Randomly chooses a patrol point it can go to.
+                    Patrol points random; randomly chooses a patrol point it can go to.
                 </p>
                 <p>
-                    True random: Randomly chooses a point in the navigation mesh it in and goes to it.
+                    True random; randomly chooses a point in the navigation mesh it's in and goes to it.
                 </p>
-                <p>A normal sequence for the Ai would be, moving around based on its patrol behavior, if it gets a
-                    sensation
-                    trigger
-                    change to Alerted state. If it spots the player change to Chase state. When it loses sight of the
-                    player,
-                    change
+                <p>
+                    A normal sequence for the Ai would be, moving around based on its patrol behavior, if it gets a sensation trigger
+                    change to Alerted state. If it spots the player, change to Chase state. When it loses sight of the player, change
                     Alerted state and if it can not see the player there change to Patrol state.
                 </p>
             </div>
