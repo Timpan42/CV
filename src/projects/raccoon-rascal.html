@@ -49,10 +49,10 @@ cardItem:
             <div class="project-about-content project-text-padding">
                 <h3>Summary</h3>
                 <p>
-                    Raccoon Rascol is a third-person chase and run game, where I worked on Gameplay, System and UI programming. I go
-                    into more detail on how the spawning system works and in game UI. I learned from this project how to work in a team
-                    in Unity, got better at communication in a team, learning how to manage stress when working and changing plans when
-                    getting feedback.
+                    Raccoon Rascol is a third-person chase and run game, where I worked on Gameplay, System and UI programming. I go into
+                    more detail on how the spawning system works and in game UI. I learned from this project how to work in a team in Unity,
+                    got better at communication in a team, learning how to manage stress when working and changing plans when getting
+                    feedback.
                 </p>
             </div>
 
@@ -80,20 +80,14 @@ cardItem:
         
                 <h3>Introduction</h3>
                 <p>
-                    Raccoon Rascol is a third-person chase and run game where you play as a mischievous raccoon stealing items
-                    while
-                    trying not to get caught. When items are brought back to the raccoons stash, the player gets buffs,
-                    increasing
-                    movement speed and jump power. There are also power ups scattered around the map increasing the movement
-                    speed and
-                    jump power.
+                    Raccoon Rascol is a third-person chase and run game where you play as a mischievous raccoon stealing items while trying
+                    not to get caught. When items are brought back to the raccoons stash, the player gets buffs, increasing movement speed
+                    and jump power. There are also power ups scattered around the map increasing the movement speed and jump power.
                 </p>
                 <p>
-                    I worked on gameplay mechanics for example power ups and stash buffs. I also worked on systems like, item
-                    and power
-                    up spawners, shop system and money system. I did most of the in game Ui implementation and programming,
-                    connecting
-                    gameplay with the Ui.
+                    I worked on gameplay mechanics for example power ups and stash buffs. I also worked on systems like, item and power up
+                    spawners, shop system and money system. I did most of the in game Ui implementation and programming, connecting gameplay
+                    with the Ui.
                 </p>
             </div>
         </div>
@@ -104,14 +98,12 @@ cardItem:
                 <div class="project-side-by-side">
                     <div>
                         <p>
-                            The game uses spawners for items and powerups that the player can collect, items gradually
-                            populating the level over
+                            The game uses spawners for items and powerups that the player can collect, items gradually populating the level over
                             time.
                         </p>
                         <p>
-                            Items and powerups spawn location is predetermined by using gameobjects that only hold a transform,
-                            using them
-                            as points for the spawning system.
+                            Items and powerups spawn location is predetermined by using gameobjects that only hold a transform, using them as points
+                            for the spawning system.
                         </p>
                         <p>
                             When an Item or powerup has populated a location others can't spawn on the same
@@ -125,17 +117,15 @@ cardItem:
                     <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/item-and-buff-compresst.webp"
                         alt="">
                     <p>
-                        Power ups use an arrow and differences in color to make it easier to see what kind of power up it is. A
-                        yellow arrow
-                        pointing up is a jump buff and a green arrow pointing forward is a speed buff. These buffs last a couple
-                        of seconds.
+                        Power ups use an arrow and differences in color to make it easier to see what kind of power up it is. A yellow arrow
+                        pointing up is a jump buff and a green arrow pointing forward is a speed buff. These buffs last a couple of seconds.
+
                     </p>
                 </div>
                 <div class="project-side-by-side">
                     <div>
                         <p>
-                            Items have different colored outlines both in game and when in the inventory, to showcase different
-                            rarities, rarer
+                            Items have different colored outlines both in game and when in the inventory, to showcase different rarities, rarer
                             items being worth more than more common ones.
                         </p>
                     </div>
@@ -332,10 +322,9 @@ public class RandomSpawner : Spawner
                 <div class="project-side-by-side">
                     <div>
                         <p>
-                            The In game UI uses a UI manager that takes and sends C# events when the appropriate gameplay event
-                            occurs. The inventory is updated every time an item gets picked up, adding the item to the inventory
-                            and updating the points counter. When reaching the raccoon stash the item points gets cashed in and
-                            gets added to the money UI.
+                            The In game UI uses a UI manager that takes and sends C# events when the appropriate gameplay event occurs. The
+                            inventory is updated every time an item gets picked up, adding the item to the inventory and updating the points
+                            counter. When reaching the raccoon stash the item points gets cashed in and gets added to the money UI.                        
                         </p>
                     </div>
                     <img class="center project-single-img" src="/images/{{ cardItem.imageFileRoute }}/start-compresst.webp"
@@ -345,23 +334,21 @@ public class RandomSpawner : Spawner
                 <div class="project-side-by-side" data-layout="column-reverse">
                     <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/fild-bar-compresst.webp" alt="">
                     <p>
-                        When chasing in the greed slider gets increased, when reaching a certain level of greed a buff gets
-                        added to the raccoon. The item in the inventory Ui reflects the rarity of the item having the same
-                        color.
+                        When chasing in the greed slider gets increased, when reaching a certain level of greed a buff gets added to the
+                        raccoon. The item in the inventory Ui reflects the rarity of the item having the same color.
                     </p>
                 </div>
                 <div class="project-side-by-side">
                     <div>
                         <p>
-                            When finishing a run the money that the player has gathered and gets saved, so it can be used in the
-                            skins menu. The player can purchase skins for the raccoons both for changing the color of the
-                            raccoon and having different hats.
+                            When finishing a run the money that the player has gathered and gets saved, so it can be used in the skins menu. The
+                            player can purchase skins for the raccoons both for changing the color of the raccoon and having different hats.
                         </p>
                         <p>
-                            When opening the game a save file gets loaded and read, looking if any skins are unlocked, if it is
-                            unlocked it sets a scriptable object that holds data of skins and hats to unlock, making it possible
-                            for the player to use it in game. When buying accessories the system unlocks the scriptable object,
-                            and writes to the save file saying the accessory in question is now unlocked.
+                            When opening the game a save file gets loaded and read, I check if any skins are unlocked, if it is unlocked it sets
+                            a scriptable object that holds data of skins and hats to unlock, making it possible for the player to use it in
+                            game. When buying accessories the system unlocks the scriptable object, and writes to the save file saying the
+                            accessory in question is now unlocked.
                         </p>
                     </div>
                     <img class="center project-single-img" src="/images/{{ cardItem.imageFileRoute }}/skins.webp" alt="">
@@ -370,7 +357,8 @@ public class RandomSpawner : Spawner
                     <img class="project-single-img" src="/images/{{ cardItem.imageFileRoute }}/skins-ingame-compresst.webp"
                         alt="">
                     <p>
-                        Whatever skin or accessory was selected in the skins menu gets reflected in the in game.
+                        Whatever a skin or accessory is selected in the skins menu, it gets reflected in the game, changing into the chosen
+                        skin or accessory.
                     </p>
                 </div>
                 <div class="">
@@ -955,16 +943,16 @@ public class CustomeChanger : MonoBehaviour
             <div class="project-content-background project-text-padding">
                 <h3>What I learned </h3>
                 <p>
-                    Got better at working in a team inside Unity, keeping a consistent code style and codebase, communicating on what I
-                    am working on to others so we don't work on the same thing at the same time, and using Unity's Perforce integration
-                    to minimise the risk of merge conflicts.
+                    I got better at working in a team while using Unity, keeping a consistent code style and codebase, communicating on
+                    what I am working on to others so we don't work on the same thing at the same time, and using Unity's Perforce
+                    integration to minimise the risk of merge conflicts.
                 </p>
                 <p>
                     I learned how to use Perforce and Jira as this was the first time using these tools. Perforce took some time to get
-                    used to and work with, but I found the feature of seeing which files other people were working on super useful for.
-                    Jira was easier to grasp being similar to tools like Trello, so I already had some experience working with these
-                    types of tools. I liked the function of ordering things by epics so it was easier to see how far along a feature
-                    was, and what was done inside of it.
+                    used to and work with, but I found the feature of seeing which files other people were working on super useful. Jira
+                    was easier to grasp being similar to tools like Trello, so I already had some experience working with these types of
+                    tools. I liked the function of ordering things by epics so it was easier to see how far along a feature was, and
+                    what was done inside of it.
                 </p>
                 <p>
                     I learned the importance of changing plans after feedback and changing systems to improve the gaming experience even
@@ -975,8 +963,8 @@ public class CustomeChanger : MonoBehaviour
                 </p>
                 <p>
                     I learned how to manage stress when there is a lot of work but not a lot of time, being able to work in dose
-                    conditions and still being able to plan on how to divide my time so things get done in time. Focusing on the most
-                    important features and not wasting time on things that were nice to have but not important for the game.
+                    conditions and still being able to plan how to divide my time so things get done. Focusing on the most important
+                    features and not wasting time on things that were nice to have but not important for the game.
                 </p>
             </div>
         </div>

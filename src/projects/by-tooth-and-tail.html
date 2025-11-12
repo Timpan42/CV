@@ -32,7 +32,7 @@ cardItem:
             <h1 class="center">{{ title }} </h1>
             <h3 class="center">Horror | Turn-based | PC & Mobile</h3>
             <p>
-
+                By Tooth & Tail is a 3D top down, grid-based stealth game, with a chaotic theme            
             </p>
             <p>
                 Itch.io page: <a href="{{cardItem.projectUrl}}">{{cardItem.projectUrl}}</a>
@@ -50,8 +50,8 @@ cardItem:
                 <h3>Summary</h3>
                 <p>
                     By Tooth & Tail is a 3D top down, grid-based stealth game, where I worked on gameplay and system programming. I did
-                    the mobile port of the, making sure it had the same playability as the PC version. I learned from friction in the
-                    team, keeping communication going in the team and got better at estimating time for features.
+                    the mobile port, making sure it had the same playability as the PC version. I learned from friction in the team,
+                    keeping communication going in the team and got better at estimating time for features.
                 </p>
             </div>
 
@@ -81,12 +81,26 @@ cardItem:
                 <p>
                     By Tooth & Tail is a 3D top down, grid-based stealth game where the player is playing as a failed experiment rat
                     that is trying to find the dagger plaid. Inspired by the pokemon dungeons movement, in our game whenever the player
-                    moves or does an action that counts as a turn move, makes the enemy make a turn move. There are interactables used
-                    for distracting enemies, making them move in its direction, and hiding spots used for stealth.
+                    moves or does an action that counts as a turn action, makes the enemy make a turn action. There are interactables
+                    used for distracting enemies, making them move in its direction, and hiding spots used for stealth.
                 </p>
                 <p>
-                    I worked primarily on the turn based system, interactables, specific tiles for the grid and their effects, helping
-                    implement Ui and porting the game to mobile.
+                    I worked primarily on:
+                </p>
+                <p>
+                    Turn based system - choosing what counts as a turn action and how the game will transition turns from the player to
+                    npc in the world.
+                </p>
+                <p>
+                    Interactables - any items that the player could interact with was my responsibility to handle, items that would
+                    affect enemies and player pickups.
+                </p>
+                <p>
+                    UI implementation - helping to implement UI for the PC and mobile port.
+                </p>
+                <p>
+                    Porting the game to mobile - making sure controls and gameplay worked the same for both PC and mobile versions, also
+                    handling performance issues that could arise when working with weaker hardware.
                 </p>
             </div>
         </div>
@@ -96,18 +110,17 @@ cardItem:
                 <h3>Turn based system</h3>
                 <p>
                     Every time the player makes an action input is counted as a turn, action inputs are; moving to a tile and
-                    interacting with a distractible object.
-                    When the player has made its move it comes to the enemies turn. After all enemies had done its action the system
-                    repeats itself and it becomes the player's turn again.
+                    interacting with a distractible object. When the player has made its action it switches to the enemies turn. After
+                    all enemies have done their actions the system repeats itself and it goes back to the player's turn.
                 </p>
-
+                
                 <p>
-                    Some struggles I had when making this system was because of a bug, making it possible to move twice in one turn when
-                    the player should only be able to move ones in a turn. The cause of the bug was most likely caused by the way we
-                    handled inputs. When we received an input we took its value it held and then broadcast that value using an event.
-                    Because of this set up, the player could spam inputs broadcasting multiple inputs before the turn system could
-                    switch to the enemies turn. The solution was adding an execution phase that gets activated after the enemies had
-                    decided their turn.
+                    Some struggles I had when making this system was because of a bug. The bug made it possible to move twice in one
+                    turn when the player should only be able to move ones. The cause of the bug was most likely by how inputs were
+                    handled. When we received an input we took its value it held and then broadcast that value using an event. Because
+                    of this set up, the player could spam inputs broadcasting multiple inputs before the turn system could switch to the
+                    enemies turn. The solution was adding an execution phase that gets activated after the enemies had decided their
+                    turn.
                 </p>
                
                 <div class="">
@@ -361,17 +374,18 @@ public class EnemyTakeTurn : MonoBehaviour
                     For this project I got the unfortunate experience of having friction in the team to the point where the quality of
                     the game got impacted. From this experience I learned some important things to do and keep in mind when dealing with
                     these kinds of situations. Being calm under undesirable situations is super important, bringing negative emotions
-                    does not help the situation, staging calm even walking away from the situation for a movement can be super important
-                    when later the situation needs to be addressed. Bringing in other neutral people in the conversation when things
-                    need to be meditated is very helpful to put things into perspective for both parties and that the conversation stays
-                    civil and does not become heated. Keeping self motivation up, wanting to continue working on a project and wanting
-                    to fix friction in the team is super important, so work doesn't get hindered by a lack of motivation.
+                    does not help the situation, staying calm or even walking away from the situation for a movement can be super
+                    important, when later the situation needs to be addressed. Bringing in other neutral people in the conversation when
+                    things need to be meditated is very helpful to put things into perspective for both parties and that the
+                    conversation stays civil and does not become heated. Keeping self motivation up, wanting to continue working on a
+                    project and wanting to fix friction in the team is super important, so work doesn't get hindered by a lack of
+                    motivation.
                 </p>
                 <p>
                     I learned how important communication is especially when working remotely, so communication does not get missed or
-                    wrongly interpreted in the team, and being updated on what is happening in the project, on what is getting worked
-                    on, what is done and what needs to get done. Jira has been super helpful in this front to keep track of what is
-                    happening in the project.
+                    wrongly interpreted in the team. Being updated on what is happening in the project, on what is getting worked on,
+                    what is done and what needs to get done, keeps everyone tuned in on what state the project is in. Jira has been
+                    super helpful in this front to keep track of what is happening in the project.
                 </p>
                 <p>
                     I got better at estimating and planning for deadlines for features, so the team can more easily plan around when my
